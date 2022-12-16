@@ -6,5 +6,5 @@ using System.Linq.Expressions;
 using System.Text;
 
 
-var day = new Day13(13);
-day.RunPart1(ArgumentType.Sample);
+var day = new Day16(16);
+day.RunPart2(ArgumentType.Full);

@@ -16,13 +16,15 @@ namespace AdventOfCode.Year2022
         }
         public override void RunPart1(ArgumentType argumentType)
         {
-            string[] input = argumentType == ArgumentType.Sample ? Sample : Full;
+            string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
             result = "";
+            Console.WriteLine(result);            
         }
         public override void RunPart2(ArgumentType argumentType)
         {
-            string[] input = argumentType == ArgumentType.Sample ? Sample : Full;
+            string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
             result = "";
+            Console.WriteLine(result);
         }
     }
 
