@@ -11,7 +11,8 @@ namespace AdventOfCode.Year2022
 {
     public class Day17 : Day
     {
-        
+        //TODO - Finish my implementation
+
         public Day17(int today) : base(today)
         {
 
