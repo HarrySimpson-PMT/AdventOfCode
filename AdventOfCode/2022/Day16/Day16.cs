@@ -46,6 +46,11 @@ namespace AdventOfCode.Year2022
         public int VariationsTested { get; set; } = 0;
         public int MaxSimulationOutput { get; set; } = 0;
         public int PressuerizedNodes { get; set; } = 0;
+
+        record Map(int[,] distances, Valve[] valves);
+        record Valve(int id, string name, int flowRate, string[] tunnels);
+        record Player(Valve valve, int distance);
+        
         public Dictionary<string, ControlNode> Nodes { get; set; } = new();
         public SortedSet<string> ValveStateMap { get; set; } = new();
         public Dictionary<string, (int total, int time)> ValveState { get; set; } = new();
