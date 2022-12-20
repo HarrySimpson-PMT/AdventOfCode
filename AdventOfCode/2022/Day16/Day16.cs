@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace AdventOfCode.Year2022
 {
-    //TODO - Finish my implementation
+    //TODO - Finish my implementation - Need to rewrite implementation using a map of all paths with precalulated shortest distances to each point, toxic but faster than mass simulation lol.
     
     public class Day16 : Day
     {
@@ -26,12 +26,6 @@ namespace AdventOfCode.Year2022
             Solution solution = new Solution();
             result = solution.PartOne(string.Join("\n", data)).ToString();
             Console.WriteLine(result);
-
-
-            //VolcanoPressureControlSystem VPCS = new VolcanoPressureControlSystem(data);
-            //VPCS.BacktrackingMaximizeOpeningSimulation(0, 0, "AA", 0);
-            //result = VPCS.MaxSimulationOutput.ToString();
-            //Console.WriteLine(result);
         }
 
         public override void RunPart2(ArgumentType argumentType)
@@ -181,6 +175,7 @@ namespace AdventOfCode.Year2022
 
                 return $"{ValveOpen} and has flow rate {FlowRate} and connects to {string.Join(", ", Connections)}";
             }
+
             public void MakeConnections(Dictionary<string, ControlNode> nodes)
             {
                 foreach (var connection in Connections)

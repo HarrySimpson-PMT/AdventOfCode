@@ -11,8 +11,7 @@ namespace AdventOfCode.Year2022
 {
     public class Day17 : Day
     {
-        //TODO - Finish my implementation
-
+        //TODO - Finish my implementation - Need to refator tower heigh to be limited and then use the cache checking to determine seen periods adn use that to crush the speed challenge, should be doable in a couple hours
         public Day17(int today) : base(today)
         {
 
@@ -21,39 +20,41 @@ namespace AdventOfCode.Year2022
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
 
-            Solution2 solution = new Solution2();
-            Console.WriteLine(solution.PartTwo(data[0]));
+            //Solution2 solution = new Solution2();
+            //Console.WriteLine(solution.PartTwo(data[0]));
 
             int currentshape = 0;
-            FallingRockSimulator FRS = new FallingRockSimulator(); 
-            FallingRockSimulator.Shape shape = new FallingRockSimulator.Shape(currentshape++, 2);
-            int ShapeHeight = 3;
+            FallingRockSimulator FRS = new FallingRockSimulator();
+            FallingRockSimulator.Shape shape = new FallingRockSimulator.Shape(currentshape, 2);
+            long ShapeLevel = 3;
             int moveselctor = 0;
-            while(currentshape<2023)
+            while (currentshape < 2023)
             {
                 //print FallingRockSimulator Tube
-                FRS.Print();
-                
+                //FRS.Print();
+
                 if (moveselctor >= data[0].Length)
                     moveselctor = 0;
-                
-                FRS.NextMove(data[0][moveselctor++], ref shape, ShapeHeight);
-                
-                if(!FRS.NextMove('D', ref shape, ShapeHeight))
+
+                FRS.NextMove(data[0][moveselctor++], ref shape, ShapeLevel);
+
+                if (!FRS.NextMove('D', ref shape, ShapeLevel))
                 {
-                    FRS.WriteShapeToTube(shape, ShapeHeight);
+                    FRS.WriteShapeToTube(shape, ShapeLevel);
                     currentshape++;
-                    if (currentshape == 2023)
+                    if (currentshape == 2022)
                     {
                         result = FRS.currentHeight.ToString();
                         break;
                     }
-                    ShapeHeight = FRS.currentHeight + 3;
-                    shape = new FallingRockSimulator.Shape(currentshape % 5, ShapeHeight);
+                    ShapeLevel = FRS.currentHeight + 3;
+                    shape = new FallingRockSimulator.Shape(currentshape % 5, 2);
+                    //print shape
+                    //shape.Print();
                 }
                 else
                 {
-                    ShapeHeight--;
+                    ShapeLevel--;
                 }
             }
             Console.WriteLine(result);
@@ -61,21 +62,115 @@ namespace AdventOfCode.Year2022
         public override void RunPart2(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            result = "";
+            long MaxRocks = 1000000000000;
+            FallingRockSimulator FRS = new FallingRockSimulator();
+            FallingRockSimulator.Shape shape = new FallingRockSimulator.Shape(0, 2);
+            long ShapeLevel = 3;
+            int moveselctor = 0;
+            int shapeid = 1;
+            var seen = new Dictionary<string, (long rocks, long height)>();
+            while (MaxRocks > 0)
+            {
+                //print FallingRockSimulator Tube
+                //FRS.Print();
+
+                var lines = FRS.Tube.Take(100).Select(x => new string(string.Join(",", x))).ToArray();
+                var hash = FRS.Tube.Count() > 0 ? FRS.TubeHash() : "";
+                if (seen.TryGetValue(hash, out var cache))
+                {
+                    var heightOfPeriod = FRS.currentHeight - cache.height;
+                    var periodLength = cache.rocks - MaxRocks;
+                    
+                    long reduction = MaxRocks / periodLength;
+                    MaxRocks = MaxRocks % periodLength;
+                    FRS.currentHeight += heightOfPeriod * reduction;
+                    ShapeLevel = FRS.currentHeight + 3;
+                    break;
+
+                }
+                else
+                {
+
+                    //print FallingRockSimulator Tube
+                    //FRS.Print();
+
+                    if (moveselctor >= data[0].Length)
+                        moveselctor = 0;
+
+                    FRS.NextMove(data[0][moveselctor++], ref shape, ShapeLevel);
+
+                    if (!FRS.NextMove('D', ref shape, ShapeLevel))
+                    {
+                        if (FRS.currentHeight > 1)
+                            seen.Add(hash, (MaxRocks, FRS.currentHeight));
+                        FRS.WriteShapeToTube(shape, ShapeLevel);
+                        MaxRocks--;
+                        if (MaxRocks == 0)
+                            break;
+                        ShapeLevel = FRS.currentHeight + 3;
+                        shape = new FallingRockSimulator.Shape((shapeid++ % 5), 2);
+                    }
+                    else
+                    {
+                        ShapeLevel--;
+                    }
+                }
+
+            }
+            while (MaxRocks > 0)
+            {
+                if (moveselctor >= data[0].Length)
+                    moveselctor = 0;
+
+                FRS.NextMove(data[0][moveselctor++], ref shape, ShapeLevel);
+
+                if (!FRS.NextMove('D', ref shape, ShapeLevel))
+                {
+                    FRS.WriteShapeToTube(shape, ShapeLevel);
+                    MaxRocks--;
+                    if (MaxRocks == 0)
+                        break;
+                    ShapeLevel = FRS.currentHeight + 3;
+                    shape = new FallingRockSimulator.Shape((shapeid++ % 5), 2);
+                }
+                else
+                {
+                    ShapeLevel--;
+                }
+            }
+            result = FRS.currentHeight.ToString();
+
+
             Console.WriteLine(result);
         }
     }
     public class FallingRockSimulator
     {
-        public int currentHeight { get; set; } = 0;
+        public long currentHeight { get; set; } = 0;
+        public int workingtube { get; set; } = 100;
         public int width { get; set; } = 7;
         public List<bool[]> Tube { get; set; } = new List<bool[]>();
+        //aggregate all bool[] in tube into string seperated with newlines
+        //public string TubeHash => Tube.Aggregate((x, next) => x.Concat(next).ToArray()).Aggregate("", (x, next) => x + (next ? "#" : "."));
+        public string TubeHash()
+        {
+            var sb = new StringBuilder();
+            foreach (var line in Tube)
+            {
+                foreach (var c in line)
+                {
+                    sb.Append(c ? "#" : ".");
+                }
+                sb.AppendLine();
+            }
+            return sb.ToString();
+        }
         public Shape CurrentShape { get; set; }
 
         public void Print()
         {
             Console.Clear();
-            for (int i = Tube.Count-1; i >= 0 ; i--)
+            for (int i = Tube.Count - 1; i >= 0; i--)
             {
                 for (int j = 0; j < Tube[i].Length; j++)
                 {
@@ -85,28 +180,31 @@ namespace AdventOfCode.Year2022
             }
             System.Threading.Thread.Sleep(100);
         }
-        public void WriteShapeToTube(Shape shape, int shapeHeight)
+        public void WriteShapeToTube(Shape shape, long ShapeLevel)
         {
-            for (int level = shapeHeight; level < currentHeight; level++)
+            int Overlap = (int)(currentHeight - ShapeLevel);
+            for (int level = 0; level < Overlap; level++)
             {
-                List<Coord> onlevel = shape.ShapePoints.Where(x => x.y == currentHeight - level).ToList();
+                List<Coord> onlevel = shape.ShapePoints.Where(x => x.y == level).ToList();
                 foreach (Coord item in onlevel)
                 {
-                    Tube[level][item.x] = true;
+                    Tube[Tube.Count() - Overlap + level][item.x] = true;
                 }
             }
-            for (int level = currentHeight - shapeHeight; level <= shape.height; level++)
+            for (int level = Overlap; level <= shape.height; level++)
             {
+                if (Tube.Count() > 100)
+                    Tube.RemoveAt(0);
                 Tube.Add(new bool[width]);
                 currentHeight++;
                 List<Coord> onlevel = shape.ShapePoints.Where(x => x.y == level).ToList();
                 foreach (Coord item in onlevel)
                 {
-                    Tube[level][item.x] = true;
+                    Tube[Tube.Count - 1][item.x] = true;
                 }
             }
         }
-        public bool NextMove(char direction, ref Shape current, int currentlevel)
+        public bool NextMove(char direction, ref Shape current, long ShapeLevel)
         {
             Shape nextshape;
             switch (direction)
@@ -117,38 +215,39 @@ namespace AdventOfCode.Year2022
                     nextshape = new Shape(current.ShapeTypeID, current.left - 1);
                     if (nextshape.left < 0 || nextshape.right >= width)
                         return false;
-                    if (IsBlocked(nextshape, currentlevel))
+                    if (IsBlocked(nextshape, ShapeLevel))
                         return false;
                     current = nextshape;
                     return true;
                 case '>':
-                    if (current.right == width - 2)
+                    if (current.right == width)
                         return false;
                     nextshape = new Shape(current.ShapeTypeID, current.left + 1);
                     if (nextshape.left < 0 || nextshape.right >= width)
                         return false;
-                    if (IsBlocked(nextshape, currentlevel))
+                    if (IsBlocked(nextshape, ShapeLevel))
                         return false;
                     current = nextshape;
                     return true;
                 case 'D':
-                    if (IsBlocked(current, currentlevel - 1))
+                    if (IsBlocked(current, ShapeLevel - 1))
                         return false;
                     return true;
                 default:
                     throw new Exception("Invalid direction");
             }
         }
-        public bool IsBlocked(Shape shape, int shapeHeight)
+        public bool IsBlocked(Shape shape, long currentlevel)
         {
-            if (shapeHeight==-1)
+            if (currentlevel == -1)
                 return true;
-            for (int level = shapeHeight; level < currentHeight; level++)
+            int overlap = (int)(currentHeight - currentlevel);
+            for (int level = 0; level < overlap; level++)
             {
-                List<Coord> onlevel = shape.ShapePoints.Where(x => x.y == currentHeight - level).ToList();
+                List<Coord> onlevel = shape.ShapePoints.Where(x => x.y == level).ToList();
                 foreach (Coord item in onlevel)
                 {
-                    if (Tube[level][item.x])
+                    if (Tube[Tube.Count() - overlap + level][item.x])
                         return true;
                 }
             }
@@ -161,8 +260,9 @@ namespace AdventOfCode.Year2022
             public int height { get; set; }
             public int left { get; set; }
             public int right { get; set; }
-            public Shape(int type, int left)
+            public Shape(int type, int Left)
             {
+                left = Left;
                 ShapeTypeID = type;
                 switch (type)
                 {
@@ -173,7 +273,7 @@ namespace AdventOfCode.Year2022
                         ShapePoints.Add(new Coord(1 + left, 0));
                         ShapePoints.Add(new Coord(2 + left, 0));
                         ShapePoints.Add(new Coord(3 + left, 0));
-                        right = 4 + left;
+                        right = 3 + left;
                         height = 0;
                         break;
                     //second shape is a cross 3 wide 3 high and two from the left
@@ -182,8 +282,8 @@ namespace AdventOfCode.Year2022
                         ShapePoints.Add(new Coord(1 + left, 1));
                         ShapePoints.Add(new Coord(2 + left, 1));
                         ShapePoints.Add(new Coord(1 + left, 0));
-                        ShapePoints.Add(new Coord(1 + left, 3));
-                        right = 3 + left;
+                        ShapePoints.Add(new Coord(1 + left, 2));
+                        right = 2 + left;
                         height = 2;
                         break;
                     //third shape is an L 3 wide 3 high and two from the left
@@ -193,7 +293,7 @@ namespace AdventOfCode.Year2022
                         ShapePoints.Add(new Coord(2 + left, 0));
                         ShapePoints.Add(new Coord(2 + left, 1));
                         ShapePoints.Add(new Coord(2 + left, 2));
-                        right = 3 + left;
+                        right = 2 + left;
                         height = 2;
                         break;
                     //fourth shape is a line 4 high and two from the left
@@ -210,204 +310,26 @@ namespace AdventOfCode.Year2022
                         ShapePoints.Add(new Coord(0 + left, 0));
                         ShapePoints.Add(new Coord(0 + left, 1));
                         ShapePoints.Add(new Coord(1 + left, 0));
-                        ShapePoints.Add(new Coord(2 + left, 1));
-                        right = 2 + left;
+                        ShapePoints.Add(new Coord(1 + left, 1));
+                        right = 1 + left;
                         height = 1;
                         break;
                     default:
                         throw new Exception("Invalid shape type");
                 }
             }
+            public void Print()
+            {
+                for (int i = height; i >= 0; i--)
+                {
+                    for (int j = left; j <= right; j++)
+                    {
+                        Console.Write(ShapePoints.Any(x => x.x == j && x.y == i) ? "#" : ".");
+                    }
+                    Console.WriteLine();
+                }
+            }
         }
         public record Coord(int x, int y);
-    }
-    class Solution2
-    {
-
-        public object PartOne(string input)
-        {
-            return new Tunnel(input).AddRocks(2022).height;
-        }
-
-        public object PartTwo(string input)
-        {
-            return new Tunnel(input).AddRocks(1000000000000).height;
-        }
-        
-        class Tunnel
-        {
-            // preserve just the top of the whole cave this is a practical 
-            // constant, there is NO THEORY BEHIND it.
-            const int linesToStore = 100;
-            List<string> lines;
-            long linesNotStored;
-
-            public long height => lines.Count + linesNotStored - 1;
-
-            IEnumerator<string[]> rocks;
-            IEnumerator<char> jets;
-
-            public Tunnel(string jets)
-            {
-                var rocks = new[]{
-                "####".Split("\n"),
-                " # \n###\n # ".Split("\n"),
-                "  #\n  #\n###".Split("\n"),
-                "#\n#\n#\n#".Split("\n"),
-                "##\n##".Split("\n")
-            };
-
-                this.rocks = Loop(rocks).GetEnumerator();
-                this.jets = Loop(jets.Trim()).GetEnumerator();
-                this.lines = new List<string>() { "+-------+" };
-            }
-
-            public Tunnel AddRocks(long rocks)
-            {
-                // We are adding rocks one by one until we find a recurring pattern.
-
-                // Then we can jump forward full periods with just increasing the height 
-                // of the cave: the top of the cave should look the same after a full period
-                // so no need to simulate he rocks anymore. 
-
-                // Then we just add the remaining rocks. 
-
-                var seen = new Dictionary<string, (long rocks, long height)>();
-                while (rocks > 0)
-                {
-                    var hash = string.Join("\n", lines);
-                    if (seen.TryGetValue(hash, out var cache))
-                    {
-                        // we have seen this pattern.
-                        // compute length of the period, and how much does it
-                        // add to the height of the cave:
-                        var heightOfPeriod = this.height - cache.height;
-                        var periodLength = cache.rocks - rocks;
-
-                        // advance forwad as much as possible
-                        linesNotStored += (rocks / periodLength) * heightOfPeriod;
-                        rocks = rocks % periodLength;
-                        break;
-                    }
-                    else
-                    {
-                        seen[hash] = (rocks, this.height);
-                        this.AddRock();
-                        rocks--;
-                    }
-                }
-
-                while (rocks > 0)
-                {
-                    this.AddRock();
-                    rocks--;
-                }
-                return this;
-            }
-
-            public Tunnel AddRock()
-            {
-                // Adds one rock to the cave
-                rocks.MoveNext();
-                var rock = rocks.Current;
-
-                // make room: 3 lines + the height of the rock
-                for (var i = 0; i < rock.Length + 3; i++)
-                {
-                    lines.Insert(0, "|       |");
-                }
-
-                // simulate falling
-                var (rockX, rockY) = (3, 0);
-                while (true)
-                {
-                    jets.MoveNext();
-                    if (jets.Current == '>' && !Hit(rock, rockX + 1, rockY))
-                    {
-                        rockX++;
-                    }
-                    else if (jets.Current == '<' && !Hit(rock, rockX - 1, rockY))
-                    {
-                        rockX--;
-                    }
-                    if (Hit(rock, rockX, rockY + 1))
-                    {
-                        break;
-                    }
-                    rockY++;
-                }
-
-                Draw(rock, rockX, rockY);
-                return this;
-            }
-
-            bool Hit(string[] rock, int x, int y)
-            {
-                // tells if a rock hits the walls of the cave or some other rock
-
-                var (crow, ccol) = (rock.Length, rock[0].Length);
-                for (var irow = 0; irow < crow; irow++)
-                {
-                    for (var icol = 0; icol < ccol; icol++)
-                    {
-                        if (rock[irow][icol] == '#' && lines[irow + y][icol + x] != ' ')
-                        {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-
-            void Draw(string[] rock, int rockX, int rockY)
-            {
-                // draws a rock pattern into the cave at the given x,y coordinates,
-
-                var (crow, ccol) = (rock.Length, rock[0].Length);
-                for (var irow = 0; irow < crow; irow++)
-                {
-                    var chars = lines[irow + rockY].ToArray();
-                    for (var icol = 0; icol < ccol; icol++)
-                    {
-
-                        if (rock[irow][icol] == '#')
-                        {
-                            if (chars[icol + rockX] != ' ')
-                            {
-                                throw new Exception();
-                            }
-                            chars[icol + rockX] = '#';
-                        }
-                    }
-                    lines[rockY + irow] = string.Join("", chars);
-                }
-
-                // remove empty lines from the top
-                while (!lines[0].Contains('#'))
-                {
-                    lines.RemoveAt(0);
-                }
-
-                // keep the tail
-                if (lines.Count > linesToStore)
-                {
-                    var r = lines.Count - linesToStore - 1;
-                    lines.RemoveRange(linesToStore, r);
-                    linesNotStored += r;
-                }
-            }
-
-            IEnumerable<T> Loop<T>(IEnumerable<T> items)
-            {
-                while (true)
-                {
-                    foreach (var item in items)
-                    {
-                        yield return item;
-                    }
-                }
-            }
-
-        }
     }
 }

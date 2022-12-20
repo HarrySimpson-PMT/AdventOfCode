@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AdventOfCode.Year2022;
 
-namespace AdventOfTests._2022_Tests.Day18_Tests
+namespace AdventOfTests._2022_Tests
 {
     public class Day18_Test
     {
