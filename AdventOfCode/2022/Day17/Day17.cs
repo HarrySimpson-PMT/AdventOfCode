@@ -11,7 +11,6 @@ namespace AdventOfCode.Year2022
 {
     public class Day17 : Day
     {
-        //TODO - Finish my implementation - Need to refator tower heigh to be limited and then use the cache checking to determine seen periods adn use that to crush the speed challenge, should be doable in a couple hours
         public Day17(int today) : base(today)
         {
 

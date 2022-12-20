@@ -86,6 +86,7 @@ namespace AdventOfCode.Year2022
             }
         }
         
+        [Obsolete("This method SUCKS.")]
         public void BacktrackingMaximizeOpeningSimulation(int total, int currentflow, string currentlocation, int time)
         {
 
