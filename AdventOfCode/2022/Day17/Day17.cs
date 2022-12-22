@@ -18,10 +18,7 @@ namespace AdventOfCode.Year2022
         public override void RunPart1(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-
-            //Solution2 solution = new Solution2();
-            //Console.WriteLine(solution.PartTwo(data[0]));
-
+            
             int currentshape = 0;
             FallingRockSimulator FRS = new FallingRockSimulator();
             FallingRockSimulator.Shape shape = new FallingRockSimulator.Shape(currentshape, 2);
