@@ -1,14 +1,4 @@
-﻿using AdventOfCode.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using static AdventOfCode.Year2022.Day21;
-
-namespace AdventOfCode.Year2022
+﻿namespace AdventOfCode.Year2022
 {
     public class Day21 : Day
     {
@@ -20,7 +10,7 @@ namespace AdventOfCode.Year2022
         public override void RunPart1(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            MonkeyBusiness monkeyBusiness = new MonkeyBusiness(data);
+            MonkeyBusiness monkeyBusiness = new(data);
             monkeyBusiness.ComputeMonkies();
             result = monkeyBusiness.result;
             Console.WriteLine(result);
@@ -28,7 +18,7 @@ namespace AdventOfCode.Year2022
         public override void RunPart2(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            MonkeyBusiness monkeyBusiness = new MonkeyBusiness(data);
+            MonkeyBusiness monkeyBusiness = new(data);
             monkeyBusiness.ComputeMonkiesV2();
             result = monkeyBusiness.result;
             Console.WriteLine(result);
@@ -36,10 +26,10 @@ namespace AdventOfCode.Year2022
         public class MonkeyBusiness //LOL
         {
             public string result = "";
-            public Dictionary<string, Monkey> monkeys = new Dictionary<string, Monkey>();
-            public Queue<Monkey> CompleteMonkes = new Queue<Monkey>();
+            public Dictionary<string, Monkey> monkeys = new();
+            public Queue<Monkey> CompleteMonkes = new();
 
-            public Dictionary<string, List<Monkey>> RequiredMonkies = new Dictionary<string, List<Monkey>>();
+            public Dictionary<string, List<Monkey>> RequiredMonkies = new();
 
 
             public MonkeyBusiness(string[] data)
@@ -137,7 +127,7 @@ namespace AdventOfCode.Year2022
                         case '-':
                             if (Mooke.LeftInput == null)
                             {
-                                Mooke.LeftInput = Mooke.Output +  Mooke.RightInput;
+                                Mooke.LeftInput = Mooke.Output + Mooke.RightInput;
                                 check = (long)Mooke.LeftInput;
                                 Mooke = monkeys[Mooke.LeftInputID];
                             }
@@ -171,7 +161,7 @@ namespace AdventOfCode.Year2022
 
 
                 return;
-                
+
 
             }
             public void ComputeMonkies()

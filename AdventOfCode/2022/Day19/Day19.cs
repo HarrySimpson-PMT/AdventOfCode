@@ -1,13 +1,4 @@
-﻿using AdventOfCode.Common;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-namespace AdventOfCode.Year2022
+﻿namespace AdventOfCode.Year2022
 {
     public class Day19 : Day
     {
@@ -19,7 +10,7 @@ namespace AdventOfCode.Year2022
         public override void RunPart1(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            ProductionSimulator PS = new ProductionSimulator(data);
+            ProductionSimulator PS = new(data);
             List<int> res = PS.FindBestBlueprint(24);
             int sum = 0;
             for (int i = 0; i < res.Count(); i++)
@@ -36,7 +27,7 @@ namespace AdventOfCode.Year2022
             FristThree[0] = data[0];
             FristThree[1] = data[1];
             FristThree[2] = data.Length > 3 ? data[2] : "";
-            ProductionSimulator PS = new ProductionSimulator(FristThree);
+            ProductionSimulator PS = new(FristThree);
             List<int> res = PS.FindBestBlueprint(32);
             int sum = 1;
             for (int i = 0; i < res.Count(); i++)
@@ -61,7 +52,7 @@ namespace AdventOfCode.Year2022
         }
         public List<int> FindBestBlueprint(int time)
         {
-            List<int> result = new List<int>();
+            List<int> result = new();
             foreach (Blueprint bp in Blueprints)
             {
                 Reset();
@@ -245,7 +236,7 @@ namespace AdventOfCode.Year2022
                 }
                 currentClayProduction += 1;
             }
-            if(currentGeodes==0|| currentGeodes > CurrentMax)
+            if (currentGeodes == 0 || currentGeodes > CurrentMax)
                 return true;
             return false;
         }
@@ -284,7 +275,7 @@ namespace AdventOfCode.Year2022
         public Blueprint(string data)
         {
             string pattern = @"Blueprint (\d+): Each ore robot costs (\d+) ore. Each clay robot costs (\d+) ore. Each obsidian robot costs (\d+) ore and (\d+) clay. Each geode robot costs (\d+) ore and (\d+) obsidian.";
-            Regex regex = new Regex(pattern);
+            Regex regex = new(pattern);
 
 
             var read = regex.Match(data);
@@ -302,5 +293,5 @@ namespace AdventOfCode.Year2022
             Maximums = (Math.Max(Maximums.ore, GeodeRobotCost.ore), Math.Max(Maximums.clay, GeodeRobotCost.clay), Math.Max(Maximums.obsidian, GeodeRobotCost.obsidian));
 
         }
-    }   
+    }
 }

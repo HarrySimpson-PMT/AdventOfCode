@@ -1,14 +1,4 @@
-﻿using AdventOfCode.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
-
-namespace AdventOfCode.Year2022
+﻿namespace AdventOfCode.Year2022
 {
     public class Day13 : Day
     {
@@ -21,14 +11,14 @@ namespace AdventOfCode.Year2022
             List<Packet> packets = new();
             int sum = 0;
             int set = 1;
-            
+
             bool reset = false;
-            for (int i = 0; i < data.Length; i++)            
+            for (int i = 0; i < data.Length; i++)
             {
                 packets.Add(new ListPacket(data[i]));
                 if (reset)
-                {                    
-                    sum += packets[i - 1].CompareTo(packets[i])<0?set:0;
+                {
+                    sum += packets[i - 1].CompareTo(packets[i]) < 0 ? set : 0;
                     set++;
                 }
                 reset = !reset;
@@ -56,10 +46,10 @@ namespace AdventOfCode.Year2022
 
             //Console.WriteLine(packets.IndexOf(A));
             //Console.WriteLine(packets.IndexOf(B));
-            
-            sum *= packets.IndexOf(A)+1;
-            sum *= packets.IndexOf(B)+1;
-            
+
+            sum *= packets.IndexOf(A) + 1;
+            sum *= packets.IndexOf(B) + 1;
+
             result = sum.ToString();
 
         }
@@ -83,13 +73,13 @@ namespace AdventOfCode.Year2022
 
             ListPacket A;
             ListPacket B;
-            
+
             if (this is ItemPacket)
                 A = new ListPacket($"[{(ItemPacket)this}]");
             else
                 A = (ListPacket)this;
-            
-            if(other==null)
+
+            if (other == null)
                 B = new ListPacket("");
             else if (other is ItemPacket)
                 B = new ListPacket($"[{((ItemPacket)other)}]");
@@ -125,7 +115,7 @@ namespace AdventOfCode.Year2022
             {
                 Packets.Add(new ItemPacket(null));
             }
-            for (int i = 1; i < value.Length-1; i++)
+            for (int i = 1; i < value.Length - 1; i++)
             {
                 if (value[i] == '[')
                 {
@@ -177,7 +167,7 @@ namespace AdventOfCode.Year2022
         }
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             sb.Append("[");
             foreach (Packet packet in Packets)
             {

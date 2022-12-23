@@ -1,13 +1,4 @@
-﻿using AdventOfCode.Common;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.XPath;
-
-namespace AdventOfCode.Year2022
+﻿namespace AdventOfCode.Year2022
 {
     public class Day23 : Day
     {
@@ -33,7 +24,7 @@ namespace AdventOfCode.Year2022
         }
         public class UnstableDiffusion
         {
-            public List<((int x, int y) Left, (int x, int y) Mid, (int x, int y) Right, Direction direction)> Moves = new List<((int x, int y) Left, (int x, int y) Mid, (int x, int y) Right, Direction direction)>() {
+            public List<((int x, int y) Left, (int x, int y) Mid, (int x, int y) Right, Direction direction)> Moves = new() {
                 ((-1, -1), (-1, 0), (-1, 1), Direction.North),
                 ((1, -1), (1, 0), (1, 1), Direction.South),
                 ((-1, -1), (0, -1), (1, -1), Direction.West),
@@ -71,12 +62,12 @@ namespace AdventOfCode.Year2022
                     //ESpace.Print();
                 }
             }
-            public string  DanceV2()
+            public string DanceV2()
             {
                 int i = 0;
                 AttentionSpace = new();
                 AttentionSpace.Add("breal", -1);
-                while(AttentionSpace.Count>0)
+                while (AttentionSpace.Count > 0)
                 {
                     AttentionSpace = new();
                     ConsiderMovement(i);
@@ -102,7 +93,7 @@ namespace AdventOfCode.Year2022
             }
             public void MakeMovement()
             {
-                foreach(KeyValuePair<string, int> attention in AttentionSpace)
+                foreach (KeyValuePair<string, int> attention in AttentionSpace)
                 {
                     ESpace.MoveElf(attention.Key, attention.Value);
                 }
@@ -118,29 +109,29 @@ namespace AdventOfCode.Year2022
                 {
                     bool notAlone = false;
                     string attention = null;
-                    foreach(var move in e.Moves)
+                    foreach (var move in e.Moves)
                     {
-                        if(
-                            (!e.ESpace.X_Entities.ContainsKey(x+move.Left.x) || !e.ESpace.X_Entities[x+move.Left.x].Exists(x => x.y == y+move.Left.y)) &&
-                            (!e.ESpace.X_Entities.ContainsKey(x+move.Mid.x) || !e.ESpace.X_Entities[x+move.Mid.x].Exists(x => x.y == y+move.Mid.y)) &&
-                            (!e.ESpace.X_Entities.ContainsKey(x+move.Right.x) || !e.ESpace.X_Entities[x+move.Right.x].Exists(x => x.y == y+move.Right.y))
+                        if (
+                            (!e.ESpace.X_Entities.ContainsKey(x + move.Left.x) || !e.ESpace.X_Entities[x + move.Left.x].Exists(x => x.y == y + move.Left.y)) &&
+                            (!e.ESpace.X_Entities.ContainsKey(x + move.Mid.x) || !e.ESpace.X_Entities[x + move.Mid.x].Exists(x => x.y == y + move.Mid.y)) &&
+                            (!e.ESpace.X_Entities.ContainsKey(x + move.Right.x) || !e.ESpace.X_Entities[x + move.Right.x].Exists(x => x.y == y + move.Right.y))
                             )
                         {
-                            if(attention==null)
+                            if (attention == null)
                             {
-                                switch(move.direction)
+                                switch (move.direction)
                                 {
                                     case Direction.East:
-                                        attention = $"{x}X{y+1}";
+                                        attention = $"{x}X{y + 1}";
                                         break;
                                     case Direction.South:
-                                        attention = $"{x+1}X{y}";
+                                        attention = $"{x + 1}X{y}";
                                         break;
                                     case Direction.West:
-                                        attention = $"{x}X{y-1}";
+                                        attention = $"{x}X{y - 1}";
                                         break;
                                     case Direction.North:
-                                        attention = $"{x-1}X{y}";
+                                        attention = $"{x - 1}X{y}";
                                         break;
                                     default:
                                         throw new Exception("Now you fucked up");
@@ -156,16 +147,16 @@ namespace AdventOfCode.Year2022
                                 break;
                         }
                     }
-                    if(attention != null && notAlone)
-                    if (!e.AttentionSpace.ContainsKey(attention))
-                        e.AttentionSpace.Add(attention, ID);
-                    else
-                        e.AttentionSpace[attention] = -1; //now nobody gets to move here.
+                    if (attention != null && notAlone)
+                        if (!e.AttentionSpace.ContainsKey(attention))
+                            e.AttentionSpace.Add(attention, ID);
+                        else
+                            e.AttentionSpace[attention] = -1; //now nobody gets to move here.
                 }
             }
             public class ElfSpace : EntitySpace<Elfo>
             {
-                public int Top => X_Entities.Where(x => x.Value.Count > 0).Select(x=>x.Key).Min();
+                public int Top => X_Entities.Where(x => x.Value.Count > 0).Select(x => x.Key).Min();
                 public int Bottom => X_Entities.Where(x => x.Value.Count > 0).Select(x => x.Key).Max();
                 public int Left => Y_Entities.Where(x => x.Value.Count > 0).Select(x => x.Key).Min();
                 public int Right => Y_Entities.Where(x => x.Value.Count > 0).Select(x => x.Key).Max();
@@ -173,9 +164,9 @@ namespace AdventOfCode.Year2022
                 public void Print()
                 {
                     Console.Clear();
-                    for(int x= Top; x<=Bottom;x++)
+                    for (int x = Top; x <= Bottom; x++)
                     {
-                        for(int y = Left; y<=Right; y++)
+                        for (int y = Left; y <= Right; y++)
                         {
                             if (X_Entities.ContainsKey(x) && X_Entities[x].Exists(x => x.y == y))
                                 Console.Write("#");
@@ -191,10 +182,10 @@ namespace AdventOfCode.Year2022
                 {
                     Elfo elf = new() { x = x, y = y, ID = id };
                     Entities.Add(elf);
-                    if(!X_Entities.ContainsKey(x))
+                    if (!X_Entities.ContainsKey(x))
                         X_Entities.Add(x, new());
                     X_Entities[x].Add(elf);
-                    if(!Y_Entities.ContainsKey(y))
+                    if (!Y_Entities.ContainsKey(y))
                         Y_Entities.Add(y, new());
                     Y_Entities[y].Add(elf);
                 }
@@ -216,7 +207,7 @@ namespace AdventOfCode.Year2022
                     Y_Entities[elf.y].Add(elf);
                 }
 
-            }      
+            }
         }
     }
 }

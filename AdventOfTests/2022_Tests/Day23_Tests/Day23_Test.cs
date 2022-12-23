@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AdventOfCode.Year2022;
+﻿using AdventOfCode.Year2022;
 
 namespace AdventOfTests._2022_Tests
 {
@@ -19,7 +14,7 @@ namespace AdventOfTests._2022_Tests
         public void RunPartOneSample()
         {
             day.RunPart1(ArgumentType.Sample);
-            Assert.That(day.result, Is.EqualTo("110")); 
+            Assert.That(day.result, Is.EqualTo("110"));
         }
         [Test]
         public void RunPartOneFull()

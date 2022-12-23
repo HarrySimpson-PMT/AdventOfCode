@@ -1,12 +1,4 @@
-﻿using AdventOfCode.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AdventOfCode.Year2022
+﻿namespace AdventOfCode.Year2022
 {
     public class Day22 : Day
     {
@@ -18,16 +10,15 @@ namespace AdventOfCode.Year2022
         public override void RunPart1(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            MonkeyMap MM = new MonkeyMap(data);
+            MonkeyMap MM = new(data);
             result = MM.RunDirections().ToString();
             Console.WriteLine(result);
         }
         public override void RunPart2(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            MonkeyMap MM = new MonkeyMap(data, false);
+            MonkeyMap MM = new(data, false);
             result = MM.RunDirections().ToString();
-            Console.WriteLine(result);
             Console.WriteLine(result);
 
         }
@@ -78,13 +69,14 @@ namespace AdventOfCode.Year2022
                         steps = steps + Instructions[i];
                     else
                     {
+                        Print();
                         map[position.x, position.y] = '.';
                         stepsToMove = int.Parse(steps);
                         steps = "";
                         position = Move(stepsToMove, position, facing);
                         facing = Turn(Instructions[i], facing);
                         map[position.x, position.y] = 'P';
-                        //Print();
+                        Print();
                     }
                 }
                 map[position.x, position.y] = '.';
@@ -95,6 +87,9 @@ namespace AdventOfCode.Year2022
             public void Print()
             {
                 Console.Clear();
+                Console.Clear();
+                Console.Clear();
+
                 for (int x = 0; x < map.GetLength(0); x++)
                 {
                     for (int y = 0; y < map.GetLength(1); y++)
@@ -102,6 +97,8 @@ namespace AdventOfCode.Year2022
                         Console.Write(map[x, y]);
                     }
                     Console.WriteLine();
+                    //add time dela of 1 ms
+
                 }
             }
             public (int x, int y) Move(int steps, (int x, int y) current, int facing)
@@ -186,8 +183,8 @@ namespace AdventOfCode.Year2022
                                 facing = Turn('R', facing);
                                 break;
                             case 2:
-                                newPosition.y = (sectionsize * 3 -1);
-                                newPosition.x = map.GetLength(1) - (newPosition.x+1);
+                                newPosition.y = (sectionsize * 3 - 1);
+                                newPosition.x = map.GetLength(1) - (newPosition.x + 1);
                                 facing = Turn('R', Turn('R', facing));
 
                                 break;
@@ -265,8 +262,8 @@ namespace AdventOfCode.Year2022
                                 facing = Turn('R', Turn('R', facing));
                                 break;
                             case 3:
-                                newPosition.y = (sectionsize * 3-1);
-                                newPosition.x = sectionsize + (sectionsize*3 - (newPosition.y+1));
+                                newPosition.y = (sectionsize * 3 - 1);
+                                newPosition.x = sectionsize + (sectionsize * 3 - (newPosition.y + 1));
                                 facing = Turn('L', facing);
                                 break;
                         }

@@ -9,13 +9,13 @@ namespace AdventOfCode.Year2022
         public override void RunPart1(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            FallingSandSimulator simulator = new FallingSandSimulator(data);
+            FallingSandSimulator simulator = new(data);
             result = simulator.Simulate().ToString();
         }
         public override void RunPart2(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            FallingSandSimulator simulator = new FallingSandSimulator(data, true);
+            FallingSandSimulator simulator = new(data, true);
             result = simulator.Simulate(true).ToString();
         }
 

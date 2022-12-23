@@ -1,12 +1,4 @@
-﻿using AdventOfCode.Common;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AdventOfCode.Year2022
+﻿namespace AdventOfCode.Year2022
 {
     public class Day15 : Day
     {
@@ -15,24 +7,24 @@ namespace AdventOfCode.Year2022
         public override void RunPart1(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            SensorNet net = new SensorNet(data);
+            SensorNet net = new(data);
             result = net.ScanXRayForBeaconFreeSpaces(argumentType == ArgumentType.Sample ? 10 : 2000000, argumentType == ArgumentType.Sample ? true : false).ToString();
             Console.WriteLine(result);
         }
         public override void RunPart2(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            SensorNet net = new SensorNet(data);
+            SensorNet net = new(data);
             var coords = net.ScanGridRangesForMissingBeacon(argumentType == ArgumentType.Sample ? 20 : 4000000);
             //result is the x coord  * 4000000 plus the y coord and should be very large
-            result = ((long)coords.Item1 * (long)4000000 + (long)coords.Item2).ToString();
+            result = (coords.Item1 * (long)4000000 + coords.Item2).ToString();
 
             Console.WriteLine(result);
         }
     }
     public class SensorNet
     {
-        public List<Sensor> sensors = new List<Sensor>();
+        public List<Sensor> sensors = new();
         public SensorNet(string[] data)
         {
             foreach (var line in data)
@@ -74,18 +66,18 @@ namespace AdventOfCode.Year2022
                     }
                 }
                 Console.WriteLine();
-            }                       
+            }
         }
         public (int x, int y) ScanGridRangesForMissingBeacon(int len)
         {
             //find the limits of all the points in sensors
             for (int y = 0; y <= len; y++)
             {
-                List<(int x1, int x2)> ranges = new List<(int x1, int x2)>();
+                List<(int x1, int x2)> ranges = new();
 
                 //find sensors whos distance to beacon overlaps the current y level
                 var sensorsInRange = sensors.Where(s => (s.Y >= y && s.Y - s.DistanceToBeacon <= y) || (s.Y <= y && s.Y + s.DistanceToBeacon >= y)).ToList();
-                foreach(Sensor sensor in sensorsInRange)
+                foreach (Sensor sensor in sensorsInRange)
                 {
                     //find the x range of the current sensor
                     ranges.Add(sensor.GetXRange(y));
@@ -114,7 +106,7 @@ namespace AdventOfCode.Year2022
                         }
                     }
                     ranges = ranges.OrderBy(r => r.x1).ToList();
-                    
+
                 }
                 if (ranges[0].x2 < len)
                 {
@@ -128,14 +120,14 @@ namespace AdventOfCode.Year2022
         [Obsolete("This method is obsolete. Use ScanGridRangesForMissingBeacon instead.", true)]
         public (int x, int y) ScanGridForMissingBeacon(int len, bool draw)
         {
-            bool[,] grid = new bool[len+1, len+1];
+            bool[,] grid = new bool[len + 1, len + 1];
             foreach (var sensor in sensors)
             {
                 for (int y = sensor.Y - sensor.DistanceToBeacon; y <= sensor.Y + sensor.DistanceToBeacon; y++)
                 {
                     for (int x = sensor.X - sensor.DistanceToBeacon; x <= sensor.X + sensor.DistanceToBeacon; x++)
                     {
-                        if(Math.Abs(x-sensor.X)+Math.Abs(y-sensor.Y)<=sensor.DistanceToBeacon)
+                        if (Math.Abs(x - sensor.X) + Math.Abs(y - sensor.Y) <= sensor.DistanceToBeacon)
                         {
                             if (x >= 0 && x < grid.GetLength(0) && y >= 0 && y < grid.GetLength(1))
                             {
@@ -147,7 +139,7 @@ namespace AdventOfCode.Year2022
                     }
                 }
             }
-            if(draw)
+            if (draw)
             {
                 for (int y = 0; y < grid.GetLength(1); y++)
                 {

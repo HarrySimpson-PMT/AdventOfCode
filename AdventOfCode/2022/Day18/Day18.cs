@@ -1,12 +1,4 @@
-﻿using AdventOfCode.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-namespace AdventOfCode.Year2022
+﻿namespace AdventOfCode.Year2022
 {
     public class Day18 : Day
     {
@@ -18,14 +10,14 @@ namespace AdventOfCode.Year2022
         public override void RunPart1(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            LavaScanner scanner = new LavaScanner(data);
+            LavaScanner scanner = new(data);
             result = scanner.sides.ToString();
             Console.WriteLine(result);
         }
         public override void RunPart2(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            LavaScanner scanner = new LavaScanner(data, true);
+            LavaScanner scanner = new(data, true);
             scanner.FillInternalVoids();
             result = scanner.sides.ToString();
             Console.WriteLine(result);
@@ -38,20 +30,20 @@ namespace AdventOfCode.Year2022
         public (int x, int y, int z) UpperRange { get; set; } = (int.MinValue, int.MinValue, int.MinValue);
         public bool UpgradeActive { get; set; } = false;
 
-        public Dictionary<int, LavaCube> lavaCubes = new Dictionary<int, LavaCube>();
-        public Dictionary<int, List<LavaCube>> x_cubes = new Dictionary<int, List<LavaCube>>();
-        public Dictionary<int, List<LavaCube>> y_cubes = new Dictionary<int, List<LavaCube>>();
-        public Dictionary<int, List<LavaCube>> z_cubes = new Dictionary<int, List<LavaCube>>();
-        public Dictionary<int, List<int>> Adjacencies = new Dictionary<int, List<int>>();
+        public Dictionary<int, LavaCube> lavaCubes = new();
+        public Dictionary<int, List<LavaCube>> x_cubes = new();
+        public Dictionary<int, List<LavaCube>> y_cubes = new();
+        public Dictionary<int, List<LavaCube>> z_cubes = new();
+        public Dictionary<int, List<int>> Adjacencies = new();
         public LavaScanner(string[] data, bool Upgrade = false)
         {
             for (int y = 0; y < data.Length; y++)
             {
-                LavaCube cube = new LavaCube(data[y], y);
-                
+                LavaCube cube = new(data[y], y);
+
                 if (Upgrade)
                     UpdateScanFieldRanges(cube);
-                
+
                 lavaCubes.Add(cube.ID, cube);
                 if (!x_cubes.ContainsKey(cube.x))
                 {
@@ -69,7 +61,7 @@ namespace AdventOfCode.Year2022
                 }
                 z_cubes[cube.z].Add(cube);
             }
-            if(!Upgrade)
+            if (!Upgrade)
                 CalculateAdjacentCubes();
         }
         public override string ToString()
@@ -117,10 +109,10 @@ namespace AdventOfCode.Year2022
                     {
                         if (zcubes[i].y + 1 != zcubes[i + 1].y)
                         {
-                            ScanTarget.Add((x, zcubes[i].y + 1, z));                            
+                            ScanTarget.Add((x, zcubes[i].y + 1, z));
                         }
                     }
-                } 
+                }
                 cubes = x_cubes[x].OrderBy(c => c.z).ToList();
                 foreach (int y in cubes.Select(c => c.y).Distinct())
                 {
@@ -133,20 +125,20 @@ namespace AdventOfCode.Year2022
                         }
                     }
                 }
-            }       
+            }
 
 
             int[][] Directions = new int[][] { new int[] { 1, 0, 0 }, new int[] { -1, 0, 0 }, new int[] { 0, 1, 0 }, new int[] { 0, -1, 0 }, new int[] { 0, 0, 1 }, new int[] { 0, 0, -1 } };
-            HashSet<(int x, int y, int z)> Visited = new(); 
-            
+            HashSet<(int x, int y, int z)> Visited = new();
+
             foreach (var target in ScanTarget)
             {
-                if(Visited.Contains(target))
+                if (Visited.Contains(target))
                     continue;
 
                 HashSet<(int x, int y, int z)> NewArea = new();
                 //bfs to see if we can reach the edge of the scanfield
-                Queue<(int x, int y, int z)> ToProcess = new Queue<(int x, int y, int z)>();
+                Queue<(int x, int y, int z)> ToProcess = new();
                 ToProcess.Enqueue(target);
                 while (ToProcess.Count > 0)
                 {
@@ -175,9 +167,9 @@ namespace AdventOfCode.Year2022
                 }
                 if (NewArea.Count > 0)
                 {
-                    foreach((int x, int y, int z) item in NewArea)
+                    foreach ((int x, int y, int z) item in NewArea)
                     {
-                        LavaCube cube = new LavaCube(item, lavaCubes.Count());
+                        LavaCube cube = new(item, lavaCubes.Count());
                         lavaCubes.Add(cube.ID, cube);
                         if (!x_cubes.ContainsKey(cube.x))
                         {
@@ -253,7 +245,7 @@ namespace AdventOfCode.Year2022
             {
                 return $"(ID: {ID} => {x},{y},{z} with {OpenSides} sides open";
             }
-            public LavaCube((int x, int y, int z)point, int id)
+            public LavaCube((int x, int y, int z) point, int id)
             {
                 x = point.x;
                 y = point.y;

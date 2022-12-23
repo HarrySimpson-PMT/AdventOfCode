@@ -1,14 +1,10 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using AdventOfCode.Common;
 using AdventOfCode.Year2022;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 
 
-var day = new Day23(23);
+var day = new Day22(22);
 
-int x = 3;
+int x = 2;
 
 switch (x)
 {

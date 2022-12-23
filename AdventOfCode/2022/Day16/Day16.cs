@@ -1,18 +1,9 @@
-﻿using AdventOfCode.Common;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using System.Collections;
 
 namespace AdventOfCode.Year2022
 {
     //TODO - Finish my implementation - Need to rewrite implementation using a map of all paths with precalulated shortest distances to each point, toxic but faster than mass simulation lol.
-    
+
     public class Day16 : Day
     {
 
@@ -23,7 +14,7 @@ namespace AdventOfCode.Year2022
         public override void RunPart1(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            Solution solution = new Solution();
+            Solution solution = new();
             //result = solution.PartOne(string.Join("\n", data)).ToString();
             Console.WriteLine(result);
         }
@@ -31,7 +22,7 @@ namespace AdventOfCode.Year2022
         public override void RunPart2(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            Solution solution = new Solution();
+            Solution solution = new();
             //result = solution.PartTwo(string.Join("\n", data)).ToString();
             Console.WriteLine(result);
         }
@@ -46,7 +37,7 @@ namespace AdventOfCode.Year2022
         record Map(int[,] distances, Valve[] valves);
         record Valve(int id, string name, int flowRate, string[] tunnels);
         record Player(Valve valve, int distance);
-        
+
         public Dictionary<string, ControlNode> Nodes { get; set; } = new();
         public SortedSet<string> ValveStateMap { get; set; } = new();
         public Dictionary<string, (int total, int time)> ValveState { get; set; } = new();
@@ -69,7 +60,7 @@ namespace AdventOfCode.Year2022
         {
             foreach (var node in Nodes)
             {
-                if (node.Value.FlowRate > 0 )
+                if (node.Value.FlowRate > 0)
                 {
                     ValveStateMap.Add(node.Value.Name);
                 }
@@ -79,24 +70,24 @@ namespace AdventOfCode.Year2022
         {
             get
             {
-                string state = "";                
-                foreach (var node in ValveStateMap)                              
-                    state += Nodes[node].ValveOpen?"1":"0";  
+                string state = "";
+                foreach (var node in ValveStateMap)
+                    state += Nodes[node].ValveOpen ? "1" : "0";
                 return state;
             }
         }
-        
+
         [Obsolete("This method SUCKS.")]
         public void BacktrackingMaximizeOpeningSimulation(int total, int currentflow, string currentlocation, int time)
         {
 
             VariationsTested++;
-            
+
             if (VariationsTested % 1000000 == 0)
             {
                 Console.WriteLine($"Variations tested: {VariationsTested}");
             }
-            
+
             string state = currentlocation + CurrentState;
             if (ValveState.ContainsKey(state))
             {
@@ -112,13 +103,13 @@ namespace AdventOfCode.Year2022
             {
                 ValveState.Add(state, (total, time));
             }
-            
+
             if (time == 30)
             {
                 MaxSimulationOutput = Math.Max(MaxSimulationOutput, total);
                 return;
             }
-            
+
             if (Nodes[currentlocation].FlowRate > 0 && !Nodes[currentlocation].ValveOpen)
             {
                 Nodes[currentlocation].ValveOpen = true;
@@ -132,10 +123,10 @@ namespace AdventOfCode.Year2022
             {
                 foreach (var connection in Nodes[currentlocation].NodeConnections)
                 {
-                    if(connection.Visited<3)
+                    if (connection.Visited < 3)
                     {
                         connection.Visited++;
-                        BacktrackingMaximizeOpeningSimulation(total+ currentflow, currentflow, connection.Name, time + 1);
+                        BacktrackingMaximizeOpeningSimulation(total + currentflow, currentflow, connection.Name, time + 1);
                         connection.Visited--;
                     }
                 }

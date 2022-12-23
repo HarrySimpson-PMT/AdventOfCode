@@ -1,11 +1,4 @@
-﻿using AdventOfCode.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AdventOfCode.Year2022
+﻿namespace AdventOfCode.Year2022
 {
     public class Day20 : Day
     {
@@ -17,7 +10,7 @@ namespace AdventOfCode.Year2022
         public override void RunPart1(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            Cypher cypher = new Cypher(data);
+            Cypher cypher = new(data);
             cypher.ReorderNodes();
             List<long> res = cypher.GetAtCyclesFromZero();
             result = res.Sum().ToString();
@@ -26,7 +19,7 @@ namespace AdventOfCode.Year2022
         public override void RunPart2(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            Cypher cypher = new Cypher(data, 811589153);
+            Cypher cypher = new(data, 811589153);
             cypher.ReorderNodes(10);
             List<long> res = cypher.GetAtCyclesFromZero();
             result = res.Sum().ToString();
@@ -47,16 +40,16 @@ namespace AdventOfCode.Year2022
                     long newValue = value * factor;
                     while (newValue >= data.Length)
                     {
-                        newValue -= ((newValue / (data.Length)) * (data.Length-1));
+                        newValue -= ((newValue / (data.Length)) * (data.Length - 1));
                     }
 
                     while (newValue < -data.Length)
                     {
-                        newValue += Math.Abs(((newValue / (data.Length)) * (data.Length-1)));
+                        newValue += Math.Abs(((newValue / (data.Length)) * (data.Length - 1)));
                     }
 
-                    Node node = new Node(Convert.ToInt32(newValue));
-                    long sign = (value < 0&& factor%2==0)? -1 : 1;
+                    Node node = new(Convert.ToInt32(newValue));
+                    long sign = (value < 0 && factor % 2 == 0) ? -1 : 1;
                     node.OriginalValue = (value * factor) * sign;
                     OriginalPositionNodes.Add(node);
                     if (node.Value == 0)
@@ -83,7 +76,7 @@ namespace AdventOfCode.Year2022
                         {
                             newposition -= OriginalPositionNodes.Count() - 1;
                         }
-                        
+
                         ReorderedNodes.Remove(node);
                         ReorderedNodes.Insert(newposition, node);
                     }

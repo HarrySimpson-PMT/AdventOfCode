@@ -1,13 +1,4 @@
-﻿using AdventOfCode.Common;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AdventOfCode.Year2022
+﻿namespace AdventOfCode.Year2022
 {
     public class Day17 : Day
     {
@@ -18,10 +9,10 @@ namespace AdventOfCode.Year2022
         public override void RunPart1(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            
+
             int currentshape = 0;
-            FallingRockSimulator FRS = new FallingRockSimulator();
-            FallingRockSimulator.Shape shape = new FallingRockSimulator.Shape(currentshape, 2);
+            FallingRockSimulator FRS = new();
+            FallingRockSimulator.Shape shape = new(currentshape, 2);
             long ShapeLevel = 3;
             int moveselctor = 0;
             while (currentshape < 2023)
@@ -59,8 +50,8 @@ namespace AdventOfCode.Year2022
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
             long MaxRocks = 1000000000000;
-            FallingRockSimulator FRS = new FallingRockSimulator();
-            FallingRockSimulator.Shape shape = new FallingRockSimulator.Shape(0, 2);
+            FallingRockSimulator FRS = new();
+            FallingRockSimulator.Shape shape = new(0, 2);
             long ShapeLevel = 3;
             int moveselctor = 0;
             int shapeid = 1;
@@ -76,7 +67,7 @@ namespace AdventOfCode.Year2022
                 {
                     var heightOfPeriod = FRS.currentHeight - cache.height;
                     var periodLength = cache.rocks - MaxRocks;
-                    
+
                     long reduction = MaxRocks / periodLength;
                     MaxRocks = MaxRocks % periodLength;
                     FRS.currentHeight += heightOfPeriod * reduction;
