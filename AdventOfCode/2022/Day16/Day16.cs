@@ -24,7 +24,7 @@ namespace AdventOfCode.Year2022
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
             Solution solution = new Solution();
-            result = solution.PartOne(string.Join("\n", data)).ToString();
+            //result = solution.PartOne(string.Join("\n", data)).ToString();
             Console.WriteLine(result);
         }
 
@@ -32,7 +32,7 @@ namespace AdventOfCode.Year2022
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
             Solution solution = new Solution();
-            result = solution.PartTwo(string.Join("\n", data)).ToString();
+            //result = solution.PartTwo(string.Join("\n", data)).ToString();
             Console.WriteLine(result);
         }
     }
