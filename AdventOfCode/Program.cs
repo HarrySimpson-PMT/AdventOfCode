@@ -6,9 +6,9 @@ using System.Linq.Expressions;
 using System.Text;
 
 
-var day = new Day21(21);
+var day = new Day22(22);
 
-int x = 3;
+int x = 2;
 
 switch (x)
 {
