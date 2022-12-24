@@ -1,0 +1,794 @@
+From: <Saved by Blink>
+Snapshot-Content-Location: https://adventofcode.com/2022/day/24
+Subject: Day 24 - Advent of Code 2022
+Date: Sat, 24 Dec 2022 12:26:48 -0000
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----MultipartBoundary--MuUsLvITEnG0J4GOUuM1p06zVevJsdvesm3rMcjrRW----"
+
+
+------MultipartBoundary--MuUsLvITEnG0J4GOUuM1p06zVevJsdvesm3rMcjrRW----
+Content-Type: text/html
+Content-ID: <frame-D7F31D2DEF1BAAE31E9DF628BD9728EF@mhtml.blink>
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://adventofcode.com/2022/day/24
+
+<!DOCTYPE html><html lang=3D"en-us"><head><meta http-equiv=3D"Content-Type"=
+ content=3D"text/html; charset=3DUTF-8">
+
+<title>Day 24 - Advent of Code 2022</title>
+<!--[if lt IE 9]><script src=3D"/static/html5.js"></script><![endif]-->
+<link href=3D"https://fonts.googleapis.com/css?family=3DSource+Code+Pro:300=
+&amp;subset=3Dlatin,latin-ext" rel=3D"stylesheet" type=3D"text/css">
+<link rel=3D"stylesheet" type=3D"text/css" href=3D"https://adventofcode.com=
+/static/style.css?30">
+<link rel=3D"stylesheet alternate" type=3D"text/css" href=3D"https://advent=
+ofcode.com/static/highcontrast.css?0" title=3D"High Contrast">
+<link rel=3D"shortcut icon" href=3D"https://adventofcode.com/favicon.png">
+
+</head><!--
+
+
+
+
+Oh, hello!  Funny seeing you here.
+
+I appreciate your enthusiasm, but you aren't going to find much down here.
+There certainly aren't clues to any of the puzzles.  The best surprises don=
+'t
+even appear in the source until you unlock them for real.
+
+Please be careful with automated requests; I'm not a massive company, and I=
+ can
+only take so much traffic.  Please be considerate so that everyone gets to =
+play.
+
+If you're curious about how Advent of Code works, it's running on some cust=
+om
+Perl code. Other than a few integrations (auth, analytics, social media), I
+built the whole thing myself, including the design, animations, prose, and =
+all
+of the puzzles.
+
+The puzzles are most of the work; preparing a new calendar and a new set of
+puzzles each year takes all of my free time for 4-5 months. A lot of effort
+went into building this thing - I hope you're enjoying playing it as much a=
+s I
+enjoyed making it for you!
+
+If you'd like to hang out, I'm @ericwastl on Twitter.
+
+- Eric Wastl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<body>
+<header><div><h1 class=3D"title-global"><a href=3D"https://adventofcode.com=
+/">Advent of Code</a></h1><nav><ul><li><a href=3D"https://adventofcode.com/=
+2022/about">[About]</a></li><li><a href=3D"https://adventofcode.com/2022/ev=
+ents">[Events]</a></li><li><a href=3D"https://teespring.com/stores/advent-o=
+f-code" target=3D"_blank">[Shop]</a></li><li><a href=3D"https://adventofcod=
+e.com/2022/settings">[Settings]</a></li><li><a href=3D"https://adventofcode=
+.com/2022/auth/logout">[Log Out]</a></li></ul></nav><div class=3D"user">(an=
+onymous user #2462943) <span class=3D"star-count">46*</span></div></div><di=
+v><h1 class=3D"title-event">&nbsp;&nbsp;&nbsp;<span class=3D"title-event-wr=
+ap">sub y{</span><a href=3D"https://adventofcode.com/2022">2022</a><span cl=
+ass=3D"title-event-wrap">}</span></h1><nav><ul><li><a href=3D"https://adven=
+tofcode.com/2022">[Calendar]</a></li><li><a href=3D"https://adventofcode.co=
+m/2022/support">[AoC++]</a></li><li><a href=3D"https://adventofcode.com/202=
+2/sponsors">[Sponsors]</a></li><li><a href=3D"https://adventofcode.com/2022=
+/leaderboard">[Leaderboard]</a></li><li><a href=3D"https://adventofcode.com=
+/2022/stats">[Stats]</a></li></ul></nav></div></header>
+
+<div id=3D"sidebar">
+<div id=3D"sponsor"><div class=3D"quiet">Our <a href=3D"https://adventofcod=
+e.com/2022/sponsors">sponsors</a> help make Advent of Code possible:</div><=
+div class=3D"sponsor"><a href=3D"https://www.playstation.com/en-us/corporat=
+e/playstation-careers/" target=3D"_blank" rel=3D"noopener">PlayStation</a> =
+- PlayStation isn't just the best place to play - it's also the best place =
+to work. Help us build the future of Play!</div></div>
+</div><!--/sidebar-->
+
+<main>
+<article class=3D"day-desc"><h2>--- Day 24: Blizzard Basin ---</h2><p>With =
+everything replanted for next year (and with elephants and monkeys to tend =
+the grove), you and the Elves leave for the extraction point.</p>
+<p>Partway up the mountain that shields the grove is a flat, open area that=
+ serves as the extraction point. It's a bit of a climb, but nothing the exp=
+edition can't handle.</p>
+<p>At least, that would normally be true; now that the mountain is covered =
+in snow, things have become more difficult than the Elves are used to.</p>
+<p>As the expedition reaches a valley that must be traversed to reach the e=
+xtraction site, you find that strong, turbulent winds are pushing small <em=
+>blizzards</em> of snow and sharp ice around the valley. It's a good thing =
+everyone packed warm clothes! To make it across safely, you'll need to find=
+ a way to avoid them.</p>
+<p>Fortunately, it's easy to see all of this from the entrance to the valle=
+y, so you make a map of the valley and the blizzards (your puzzle input). F=
+or example:</p>
+<pre><code>#.#####
+#.....#
+#&gt;....#
+#.....#
+#...v.#
+#.....#
+#####.#
+</code></pre>
+<p>The walls of the valley are drawn as <code>#</code>; everything else is =
+ground. Clear ground - where there is currently no blizzard - is drawn as <=
+code>.</code>. Otherwise, blizzards are drawn with an arrow indicating thei=
+r direction of motion: up (<code>^</code>), down (<code>v</code>), left (<c=
+ode>&lt;</code>), or right (<code>&gt;</code>).</p>
+<p>The above map includes two blizzards, one moving right (<code>&gt;</code=
+>) and one moving down (<code>v</code>). In one minute, each blizzard moves=
+ one position in the direction it is pointing:</p>
+<pre><code>#.#####
+#.....#
+#.&gt;...#
+#.....#
+#.....#
+#...v.#
+#####.#
+</code></pre>
+<p>Due to <span title=3D"I think, anyway. Do I look like a theoretical bliz=
+zacist?">conservation of blizzard energy</span>, as a blizzard reaches the =
+wall of the valley, a new blizzard forms on the opposite side of the valley=
+ moving in the same direction. After another minute, the bottom downward-mo=
+ving blizzard has been replaced with a new downward-moving blizzard at the =
+top of the valley instead:</p>
+<pre><code>#.#####
+#...v.#
+#..&gt;..#
+#.....#
+#.....#
+#.....#
+#####.#
+</code></pre>
+<p>Because blizzards are made of tiny snowflakes, they pass right through e=
+ach other. After another minute, both blizzards temporarily occupy the same=
+ position, marked <code>2</code>:</p>
+<pre><code>#.#####
+#.....#
+#...2.#
+#.....#
+#.....#
+#.....#
+#####.#
+</code></pre>
+<p>After another minute, the situation resolves itself, giving each blizzar=
+d back its personal space:</p>
+<pre><code>#.#####
+#.....#
+#....&gt;#
+#...v.#
+#.....#
+#.....#
+#####.#
+</code></pre>
+<p>Finally, after yet another minute, the rightward-facing blizzard on the =
+right is replaced with a new one on the left facing the same direction:</p>
+<pre><code>#.#####
+#.....#
+#&gt;....#
+#.....#
+#...v.#
+#.....#
+#####.#
+</code></pre>
+<p>This process repeats at least as long as you are observing it, but proba=
+bly forever.</p>
+<p>Here is a more complex example:</p>
+<pre><code>#.######
+#&gt;&gt;.&lt;^&lt;#
+#.&lt;..&lt;&lt;#
+#&gt;v.&gt;&lt;&gt;#
+#&lt;^v^^&gt;#
+######.#
+</code></pre>
+<p>Your expedition begins in the only non-wall position in the top row and =
+needs to reach the only non-wall position in the bottom row. On each minute=
+, you can <em>move</em> up, down, left, or right, or you can <em>wait</em> =
+in place. You and the blizzards act <em>simultaneously</em>, and you cannot=
+ share a position with a blizzard.</p>
+<p>In the above example, the fastest way to reach your goal requires <code>=
+<em>18</em></code> steps. Drawing the position of the expedition as <code>E=
+</code>, one way to achieve this is:</p>
+<pre><code>Initial state:
+#<em>E</em>######
+#&gt;&gt;.&lt;^&lt;#
+#.&lt;..&lt;&lt;#
+#&gt;v.&gt;&lt;&gt;#
+#&lt;^v^^&gt;#
+######.#
+
+Minute 1, move down:
+#.######
+#<em>E</em>&gt;3.&lt;.#
+#&lt;..&lt;&lt;.#
+#&gt;2.22.#
+#&gt;v..^&lt;#
+######.#
+
+Minute 2, move down:
+#.######
+#.2&gt;2..#
+#<em>E</em>^22^&lt;#
+#.&gt;2.^&gt;#
+#.&gt;..&lt;.#
+######.#
+
+Minute 3, wait:
+#.######
+#&lt;^&lt;22.#
+#<em>E</em>2&lt;.2.#
+#&gt;&lt;2&gt;..#
+#..&gt;&lt;..#
+######.#
+
+Minute 4, move up:
+#.######
+#<em>E</em>&lt;..22#
+#&lt;&lt;.&lt;..#
+#&lt;2.&gt;&gt;.#
+#.^22^.#
+######.#
+
+Minute 5, move right:
+#.######
+#2<em>E</em>v.&lt;&gt;#
+#&lt;.&lt;..&lt;#
+#.^&gt;^22#
+#.2..2.#
+######.#
+
+Minute 6, move right:
+#.######
+#&gt;2<em>E</em>&lt;.&lt;#
+#.2v^2&lt;#
+#&gt;..&gt;2&gt;#
+#&lt;....&gt;#
+######.#
+
+Minute 7, move down:
+#.######
+#.22^2.#
+#&lt;v<em>E</em>&lt;2.#
+#&gt;&gt;v&lt;&gt;.#
+#&gt;....&lt;#
+######.#
+
+Minute 8, move left:
+#.######
+#.&lt;&gt;2^.#
+#.<em>E</em>&lt;&lt;.&lt;#
+#.22..&gt;#
+#.2v^2.#
+######.#
+
+Minute 9, move up:
+#.######
+#&lt;<em>E</em>2&gt;&gt;.#
+#.&lt;&lt;.&lt;.#
+#&gt;2&gt;2^.#
+#.v&gt;&lt;^.#
+######.#
+
+Minute 10, move right:
+#.######
+#.2<em>E</em>.&gt;2#
+#&lt;2v2^.#
+#&lt;&gt;.&gt;2.#
+#..&lt;&gt;..#
+######.#
+
+Minute 11, wait:
+#.######
+#2^<em>E</em>^2&gt;#
+#&lt;v&lt;.^&lt;#
+#..2.&gt;2#
+#.&lt;..&gt;.#
+######.#
+
+Minute 12, move down:
+#.######
+#&gt;&gt;.&lt;^&lt;#
+#.&lt;<em>E</em>.&lt;&lt;#
+#&gt;v.&gt;&lt;&gt;#
+#&lt;^v^^&gt;#
+######.#
+
+Minute 13, move down:
+#.######
+#.&gt;3.&lt;.#
+#&lt;..&lt;&lt;.#
+#&gt;2<em>E</em>22.#
+#&gt;v..^&lt;#
+######.#
+
+Minute 14, move right:
+#.######
+#.2&gt;2..#
+#.^22^&lt;#
+#.&gt;2<em>E</em>^&gt;#
+#.&gt;..&lt;.#
+######.#
+
+Minute 15, move right:
+#.######
+#&lt;^&lt;22.#
+#.2&lt;.2.#
+#&gt;&lt;2&gt;<em>E</em>.#
+#..&gt;&lt;..#
+######.#
+
+Minute 16, move right:
+#.######
+#.&lt;..22#
+#&lt;&lt;.&lt;..#
+#&lt;2.&gt;&gt;<em>E</em>#
+#.^22^.#
+######.#
+
+Minute 17, move down:
+#.######
+#2.v.&lt;&gt;#
+#&lt;.&lt;..&lt;#
+#.^&gt;^22#
+#.2..2<em>E</em>#
+######.#
+
+Minute 18, move down:
+#.######
+#&gt;2.&lt;.&lt;#
+#.2v^2&lt;#
+#&gt;..&gt;2&gt;#
+#&lt;....&gt;#
+######<em>E</em>#
+</code></pre>
+<p><em>What is the fewest number of minutes required to avoid the blizzards=
+ and reach the goal?</em></p>
+</article>
+<p>To begin, <a href=3D"https://adventofcode.com/2022/day/24/input" target=
+=3D"_blank" style=3D"">get your puzzle input</a>.</p>
+<form method=3D"post" action=3D"https://adventofcode.com/2022/day/24/answer=
+"><p>Answer: <input type=3D"text" name=3D"answer" autocomplete=3D"off"> <in=
+put type=3D"submit" value=3D"[Submit]"></p></form>
+<p>You can also <span class=3D"share">[Share<span class=3D"share-content">o=
+n
+  <a href=3D"https://twitter.com/intent/tweet?text=3D%22Blizzard+Basin%22+%=
+2D+Day+24+%2D+Advent+of+Code+2022&amp;url=3Dhttps%3A%2F%2Fadventofcode%2Eco=
+m%2F2022%2Fday%2F24&amp;related=3Dericwastl&amp;hashtags=3DAdventOfCode" ta=
+rget=3D"_blank">Twitter</a>
+  <a target=3D"_blank">Mastodon</a></span>]</span> this puzzle.</p>
+</main>
+
+<!-- ga -->
+
+<!-- /ga -->
+
+</body></html>
+------MultipartBoundary--MuUsLvITEnG0J4GOUuM1p06zVevJsdvesm3rMcjrRW----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://fonts.googleapis.com/css?family=Source+Code+Pro:300&subset=latin,latin-ext
+
+@charset "utf-8";
+
+@font-face { font-family: "Source Code Pro"; font-style: normal; font-weigh=
+t: 300; src: url("https://fonts.gstatic.com/s/sourcecodepro/v22/HI_diYsKILx=
+Rpg3hIP6sJ7fM7PqPMcMnZFqUwX28DJKQtMRrTEUc.woff2") format("woff2"); unicode-=
+range: U+460-52F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2=
+F; }
+
+@font-face { font-family: "Source Code Pro"; font-style: normal; font-weigh=
+t: 300; src: url("https://fonts.gstatic.com/s/sourcecodepro/v22/HI_diYsKILx=
+Rpg3hIP6sJ7fM7PqPMcMnZFqUwX28DJKQtM1rTEUc.woff2") format("woff2"); unicode-=
+range: U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116; }
+
+@font-face { font-family: "Source Code Pro"; font-style: normal; font-weigh=
+t: 300; src: url("https://fonts.gstatic.com/s/sourcecodepro/v22/HI_diYsKILx=
+Rpg3hIP6sJ7fM7PqPMcMnZFqUwX28DJKQtMVrTEUc.woff2") format("woff2"); unicode-=
+range: U+1F00-1FFF; }
+
+@font-face { font-family: "Source Code Pro"; font-style: normal; font-weigh=
+t: 300; src: url("https://fonts.gstatic.com/s/sourcecodepro/v22/HI_diYsKILx=
+Rpg3hIP6sJ7fM7PqPMcMnZFqUwX28DJKQtMprTEUc.woff2") format("woff2"); unicode-=
+range: U+370-3FF; }
+
+@font-face { font-family: "Source Code Pro"; font-style: normal; font-weigh=
+t: 300; src: url("https://fonts.gstatic.com/s/sourcecodepro/v22/HI_diYsKILx=
+Rpg3hIP6sJ7fM7PqPMcMnZFqUwX28DJKQtMZrTEUc.woff2") format("woff2"); unicode-=
+range: U+102-103, U+110-111, U+128-129, U+168-169, U+1A0-1A1, U+1AF-1B0, U+=
+1EA0-1EF9, U+20AB; }
+
+@font-face { font-family: "Source Code Pro"; font-style: normal; font-weigh=
+t: 300; src: url("https://fonts.gstatic.com/s/sourcecodepro/v22/HI_diYsKILx=
+Rpg3hIP6sJ7fM7PqPMcMnZFqUwX28DJKQtMdrTEUc.woff2") format("woff2"); unicode-=
+range: U+100-24F, U+259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2=
+113, U+2C60-2C7F, U+A720-A7FF; }
+
+@font-face { font-family: "Source Code Pro"; font-style: normal; font-weigh=
+t: 300; src: url("https://fonts.gstatic.com/s/sourcecodepro/v22/HI_diYsKILx=
+Rpg3hIP6sJ7fM7PqPMcMnZFqUwX28DJKQtMlrTA.woff2") format("woff2"); unicode-ra=
+nge: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+2000-206F,=
+ U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+------MultipartBoundary--MuUsLvITEnG0J4GOUuM1p06zVevJsdvesm3rMcjrRW----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://adventofcode.com/static/style.css?30
+
+@charset "utf-8";
+
+body { background: rgb(15, 15, 35); color: rgb(204, 204, 204); font-family:=
+ "Source Code Pro", monospace; font-size: 14pt; min-width: 60em; }
+
+img { border: 0px; }
+
+a { outline: 0px; }
+
+main, figure, figcaption { display: block; }
+
+pre, code { font-family: "Source Code Pro", monospace; }
+
+header, main { text-size-adjust: none; }
+
+a { text-decoration: none; color: rgb(0, 153, 0); }
+
+a:hover, a:focus { color: rgb(153, 255, 153); }
+
+h1, h2 { font-size: 1em; font-weight: normal; }
+
+code { position: relative; display: inline-block; margin: 0px; padding: 0px=
+; }
+
+code::before { z-index: -1; content: ""; position: absolute; display: block=
+; inset: 3px -2px 0px; border: 1px solid rgb(51, 51, 64); background: rgb(1=
+6, 16, 26); }
+
+pre.wrap { max-width: 100%; white-space: pre-wrap; }
+
+.quiet { opacity: 0.5; }
+
+p.wrap { width: 45em; }
+
+.hidden-until-hover { border: 1px dotted gray; overflow: hidden; position: =
+relative; padding: 0px 0.5em; transition: border-color 0s linear 5s; }
+
+.hidden-until-hover::before { content: "(hover to reveal)"; position: absol=
+ute; opacity: 0.5; text-align: center; left: 0px; top: 0px; width: 100%; ov=
+erflow: hidden; transition: width 0s linear 5s; }
+
+.hidden-until-hover > * { visibility: hidden; transition: visibility 0s lin=
+ear 5s; }
+
+.hidden-until-hover:hover { transition: border-color 0s linear 1s; border-c=
+olor: transparent; }
+
+.hidden-until-hover:hover::before { content: "( keep hovering )"; transitio=
+n: width 0s linear 1s; width: 0px; }
+
+.hidden-until-hover:hover > * { transition: visibility 0s linear 1s; visibi=
+lity: visible; }
+
+.warning:not(.warning-active) { transition: color 1s ease 0s, opacity 1s ea=
+se 0s; }
+
+.warning-active { color: rgb(255, 0, 0); opacity: 1; }
+
+.star-count { color: rgb(255, 255, 102); }
+
+.supporter-badge { color: rgb(255, 255, 102); }
+
+a.supporter-badge:hover, a.supporter-badge:focus { text-decoration: none; c=
+olor: rgb(255, 255, 204); text-shadow: rgb(255, 255, 102) 0px 0px 5px; }
+
+.sponsor-badge { color: rgb(121, 162, 216); }
+
+a.sponsor-badge:hover, a.sponsor-badge:focus { text-decoration: none; color=
+: rgb(204, 219, 237); text-shadow: rgb(121, 162, 216) 0px 0px 5px; }
+
+#sidebar { width: 200px; float: right; margin: 0px 15px 2em 2em; position: =
+relative; z-index: 10; }
+
+#sponsor { margin-bottom: 2.5em; }
+
+header { white-space: nowrap; cursor: default; z-index: 100; margin-bottom:=
+ 2em; }
+
+header h1 { display: inline-block; margin: 0px; padding-right: 1em; }
+
+header h1 a, header h1 span { display: inline-block; text-decoration: none;=
+ color: rgb(0, 204, 0); text-shadow: rgb(0, 204, 0) 0px 0px 2px, rgb(0, 204=
+, 0) 0px 0px 5px; }
+
+header h1 a:hover, header h1 a:focus { color: rgb(153, 255, 153); text-shad=
+ow: rgb(153, 255, 153) 0px 0px 2px, rgb(153, 255, 153) 0px 0px 5px; }
+
+header h1.title-event .title-event-wrap { opacity: 0.33; white-space: pre; =
+}
+
+header .user { display: inline-block; padding-left: 1em; }
+
+header nav { display: inline-block; }
+
+header nav ul { list-style-type: none; padding: 0px; margin: 0px; display: =
+inline-block; }
+
+header nav li { display: inline-block; padding: 0px 0.6em; }
+
+header nav a { display: inline-block; text-decoration: none; outline: none;=
+ }
+
+input[type=3D"text"], textarea { color: inherit; border: 1px solid rgb(102,=
+ 102, 102); background: rgb(16, 16, 26); padding: 0px 2px; font-family: inh=
+erit; font-size: inherit; margin: 0px; }
+
+textarea { vertical-align: top; }
+
+label img { vertical-align: bottom; position: relative; top: -3px; margin-r=
+ight: 0.3em; }
+
+input[type=3D"radio"] { display: none; }
+
+input[type=3D"radio"] ~ span { cursor: pointer; display: inline-block; }
+
+input[type=3D"radio"] ~ span::before { content: "( ) "; }
+
+input[type=3D"radio"] ~ span:hover, input[type=3D"radio"] ~ span:focus { ba=
+ckground-color: rgb(25, 25, 59); }
+
+input[type=3D"radio"]:checked ~ span { color: rgb(255, 255, 255); }
+
+input[type=3D"radio"]:checked ~ span::before { content: "(O) "; }
+
+input[type=3D"checkbox"] { display: none; }
+
+input[type=3D"checkbox"] ~ span { cursor: pointer; display: inline-block; }
+
+input[type=3D"checkbox"] ~ span::before { content: "[ ] "; }
+
+input[type=3D"checkbox"] ~ span:hover, input[type=3D"checkbox"] ~ span:focu=
+s { background-color: rgb(25, 25, 59); }
+
+input[type=3D"checkbox"]:checked ~ span { color: rgb(255, 255, 255); }
+
+input[type=3D"checkbox"]:checked ~ span::before { content: "[X] "; }
+
+input[type=3D"checkbox"]:disabled ~ span { opacity: 0.3; cursor: default; }
+
+input[type=3D"checkbox"]:disabled ~ span::before { content: "[-] "; }
+
+input[type=3D"checkbox"]:disabled ~ span:hover { background-color: transpar=
+ent; }
+
+input[type=3D"submit"] { background: transparent; border: 0px; font-family:=
+ inherit; font-size: inherit; margin: 0px; padding: 0px; color: rgb(0, 153,=
+ 0); cursor: pointer; }
+
+input[type=3D"submit"]:hover, input[type=3D"submit"]:focus { color: rgb(153=
+, 255, 153); }
+
+article { width: 45em; margin-bottom: 2em; margin-top: 2em; }
+
+article:first-of-type { margin-top: 0px; }
+
+article h2 { color: rgb(255, 255, 255); margin-top: 1em; margin-bottom: 1em=
+; white-space: nowrap; }
+
+article h2 + * { margin-top: 0px; }
+
+article em { color: rgb(255, 255, 255); font-style: normal; text-shadow: rg=
+b(255, 255, 255) 0px 0px 5px; }
+
+article em.star { color: rgb(255, 255, 102); font-style: normal; text-shado=
+w: rgb(255, 255, 102) 0px 0px 5px; }
+
+article a { white-space: nowrap; }
+
+article .aside { opacity: 0.6; }
+
+article ul { list-style-type: none; padding: 0px; }
+
+article li { padding-left: 2.5em; position: relative; }
+
+article li::before { content: "=C2=A0=C2=A0-=C2=A0"; position: absolute; le=
+ft: 0px; top: 0px; }
+
+.day-success { color: rgb(255, 255, 102); text-shadow: rgb(255, 255, 102) 0=
+px 0px 5px; }
+
+form#settings input[type=3D"radio"] ~ span { min-width: 30em; }
+
+form#settings input[type=3D"checkbox"] ~ span { min-width: 30em; }
+
+.share { color: rgb(0, 153, 0); cursor: default; transition: color 0.2s eas=
+e 1s; }
+
+.share:hover, .share:focus-within { color: rgb(170, 255, 170); transition: =
+color 0.2s ease 0s; }
+
+.share .share-content { display: inline-block; vertical-align: text-bottom;=
+ white-space: nowrap; overflow: hidden; max-width: 0px; transition: max-wid=
+th 0.2s ease 1s; }
+
+.share .share-content::before { content: "=C2=A0"; }
+
+.share .share-content::after { }
+
+.share:hover .share-content, .share:focus-within .share-content { max-width=
+: 45em; transition: max-width 0.2s ease 0s; }
+
+.puzzle-input { border: 1px solid rgb(153, 153, 153); background: rgb(51, 5=
+1, 51); color: rgb(255, 255, 255); text-shadow: rgb(255, 255, 255) 0px 0px =
+5px; }
+
+.calendar { cursor: default; user-select: none; }
+
+.calendar > span { color: rgb(51, 51, 51); }
+
+.calendar > a { text-decoration: none; color: rgb(102, 102, 102); outline: =
+none; cursor: default; }
+
+.calendar a:hover, .calendar a:focus { background-color: rgba(119, 119, 165=
+, 0.2); cursor: pointer; }
+
+#calendar-countdown { padding-left: 0.5em; color: rgb(204, 204, 204); }
+
+.calendar .calendar-day { color: rgb(102, 102, 102); }
+
+.calendar a .calendar-day { color: rgb(204, 204, 204); }
+
+.calendar a .calendar-mark-complete, .calendar a .calendar-mark-verycomplet=
+e { visibility: hidden; }
+
+.calendar a.calendar-complete .calendar-mark-complete, .calendar a.calendar=
+-verycomplete .calendar-mark-complete { visibility: visible; color: rgb(255=
+, 255, 102); }
+
+.calendar a.calendar-verycomplete .calendar-mark-verycomplete { visibility:=
+ visible; color: rgb(255, 255, 102); }
+
+.calendar .calendar-day-new { animation: 5s ease 0s 1 normal none running a=
+nim-day-new; }
+
+.calendar .calendar-day-new .calendar-day { animation: 5s ease 0s 1 normal =
+none running anim-day-new-day; }
+
+@keyframes anim-day-new {=20
+  0% { color: rgb(51, 51, 51); text-shadow: transparent 0px 0px 5px; }
+  25% { color: rgb(255, 255, 255); text-shadow: rgb(255, 255, 255) 0px 0px =
+5px; }
+  100% { color: rgb(102, 102, 102); text-shadow: transparent 0px 0px 5px; }
+}
+
+@keyframes anim-day-new-day {=20
+  0% { color: rgb(102, 102, 102); text-shadow: transparent 0px 0px 5px; }
+  25% { color: rgb(255, 255, 255); text-shadow: rgb(255, 255, 255) 0px 0px =
+5px; }
+  100% { color: rgb(204, 204, 204); text-shadow: transparent 0px 0px 5px; }
+}
+
+.eventlist-event { white-space: pre; }
+
+.stats > span, .stats > span .stats-firstonly, .stats > span .stats-both { =
+color: rgb(102, 102, 102); }
+
+.stats > a { color: rgb(204, 204, 204); min-width: 35em; display: inline-bl=
+ock; }
+
+.stats > a:hover, .stats > a:focus { background-color: rgb(30, 30, 70); }
+
+.stats-firstonly { color: rgb(153, 153, 204); }
+
+.stats-both { color: rgb(255, 255, 102); }
+
+.leaderboard-daylinks { cursor: default; }
+
+.leaderboard-daylinks-selected { color: rgb(255, 255, 255); text-shadow: rg=
+b(255, 255, 255) 0px 0px 5px; }
+
+.leaderboard-daydesc-first { color: rgb(153, 153, 204); }
+
+.leaderboard-daydesc-both { color: rgb(255, 255, 102); }
+
+.leaderboard-entry { white-space: pre; }
+
+.leaderboard-entry .leaderboard-totalscore { color: rgb(255, 255, 255); }
+
+.leaderboard-anon { opacity: 0.6; }
+
+.leaderboard-userphoto { display: inline-block; height: 20px; width: 20px; =
+margin: 0px 0.5em; text-align: center; }
+
+.leaderboard-userphoto img { height: 20px; max-width: 20px; vertical-align:=
+ middle; position: relative; top: -2px; }
+
+.leaderboard-time { opacity: 0.5; }
+
+.privboard-row { white-space: pre; }
+
+.privboard-name { vertical-align: text-bottom; }
+
+.privboard-days > span { display: inline-block; color: rgb(51, 51, 51); }
+
+.privboard-days > a { display: inline-block; }
+
+.privboard-star-locked { visibility: hidden; }
+
+.privboard-star-unlocked { color: rgb(51, 51, 51); }
+
+.privboard-star-firstonly { color: rgb(153, 153, 204); }
+
+.privboard-star-both { color: rgb(255, 255, 102); }
+
+.privboard-delbtn { opacity: 0.33; }
+
+.privboard-row:hover .privboard-delbtn { opacity: 1; }
+
+.sponsors { width: 46em; }
+
+.sponsor { margin: 1em 0px; }
+------MultipartBoundary--MuUsLvITEnG0J4GOUuM1p06zVevJsdvesm3rMcjrRW----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://adventofcode.com/static/highcontrast.css?0
+
+@charset "utf-8";
+
+* { background: white !important; color: black !important; text-shadow: non=
+e !important; }
+
+a { color: rgb(0, 0, 255) !important; text-decoration: underline !important=
+; }
+
+em { font-weight: 900 !important; }
+------MultipartBoundary--MuUsLvITEnG0J4GOUuM1p06zVevJsdvesm3rMcjrRW------

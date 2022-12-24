@@ -100,11 +100,11 @@
             }
 
 
-            public class Elfo : Entity
+            public class Elfo : IEntity
             {
                 public int ID { get; set; }
-                public int x { get; set; }
-                public int y { get; set; }
+                public int X { get; set; }
+                public int Y { get; set; }
                 public void GetAttentionV1(UnstableDiffusion e)
                 {
                     bool notAlone = false;
@@ -112,9 +112,9 @@
                     foreach (var move in e.Moves)
                     {
                         if (
-                            (!e.ESpace.X_Entities.ContainsKey(x + move.Left.x) || !e.ESpace.X_Entities[x + move.Left.x].Exists(x => x.y == y + move.Left.y)) &&
-                            (!e.ESpace.X_Entities.ContainsKey(x + move.Mid.x) || !e.ESpace.X_Entities[x + move.Mid.x].Exists(x => x.y == y + move.Mid.y)) &&
-                            (!e.ESpace.X_Entities.ContainsKey(x + move.Right.x) || !e.ESpace.X_Entities[x + move.Right.x].Exists(x => x.y == y + move.Right.y))
+                            (!e.ESpace.X_Entities.ContainsKey(X + move.Left.x) || !e.ESpace.X_Entities[X + move.Left.x].Exists(x => x.Y == Y + move.Left.y)) &&
+                            (!e.ESpace.X_Entities.ContainsKey(X + move.Mid.x) || !e.ESpace.X_Entities[X + move.Mid.x].Exists(x => x.Y == Y + move.Mid.y)) &&
+                            (!e.ESpace.X_Entities.ContainsKey(X + move.Right.x) || !e.ESpace.X_Entities[X + move.Right.x].Exists(x => x.Y == Y + move.Right.y))
                             )
                         {
                             if (attention == null)
@@ -122,16 +122,16 @@
                                 switch (move.direction)
                                 {
                                     case Direction.East:
-                                        attention = $"{x}X{y + 1}";
+                                        attention = $"{X}X{Y + 1}";
                                         break;
                                     case Direction.South:
-                                        attention = $"{x + 1}X{y}";
+                                        attention = $"{X + 1}X{Y}";
                                         break;
                                     case Direction.West:
-                                        attention = $"{x}X{y - 1}";
+                                        attention = $"{X}X{Y - 1}";
                                         break;
                                     case Direction.North:
-                                        attention = $"{x - 1}X{y}";
+                                        attention = $"{X - 1}X{Y}";
                                         break;
                                     default:
                                         throw new Exception("Now you fucked up");
@@ -168,7 +168,7 @@
                     {
                         for (int y = Left; y <= Right; y++)
                         {
-                            if (X_Entities.ContainsKey(x) && X_Entities[x].Exists(x => x.y == y))
+                            if (X_Entities.ContainsKey(x) && X_Entities[x].Exists(x => x.Y == y))
                                 Console.Write("#");
                             else
                                 Console.Write(".");
@@ -180,7 +180,7 @@
 
                 public void AddElf(int x, int y, int id)
                 {
-                    Elfo elf = new() { x = x, y = y, ID = id };
+                    Elfo elf = new() { X = x, Y = y, ID = id };
                     Entities.Add(elf);
                     if (!X_Entities.ContainsKey(x))
                         X_Entities.Add(x, new());
@@ -194,17 +194,17 @@
                     if (id == -1)
                         return;
                     var elf = Entities[id];
-                    X_Entities[elf.x].Remove(elf);
-                    Y_Entities[elf.y].Remove(elf);
+                    X_Entities[elf.X].Remove(elf);
+                    Y_Entities[elf.Y].Remove(elf);
                     string[] move = attention.Split("X");
-                    elf.x = int.Parse(move[0]);
-                    elf.y = int.Parse(move[1]);
-                    if (!X_Entities.ContainsKey(elf.x))
-                        X_Entities.Add(elf.x, new());
-                    X_Entities[elf.x].Add(elf);
-                    if (!Y_Entities.ContainsKey(elf.y))
-                        Y_Entities.Add(elf.y, new());
-                    Y_Entities[elf.y].Add(elf);
+                    elf.X = int.Parse(move[0]);
+                    elf.Y = int.Parse(move[1]);
+                    if (!X_Entities.ContainsKey(elf.X))
+                        X_Entities.Add(elf.X, new());
+                    X_Entities[elf.X].Add(elf);
+                    if (!Y_Entities.ContainsKey(elf.Y))
+                        Y_Entities.Add(elf.Y, new());
+                    Y_Entities[elf.Y].Add(elf);
                 }
 
             }

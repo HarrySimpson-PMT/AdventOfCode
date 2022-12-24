@@ -2,9 +2,9 @@
 using AdventOfCode.Year2022;
 
 
-var day = new Day22(22);
+var day = new Day24(24);
 
-int x = 2;
+int x = 0;
 
 switch (x)
 {
