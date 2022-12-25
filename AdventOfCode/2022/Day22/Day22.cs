@@ -69,19 +69,19 @@
                         steps = steps + Instructions[i];
                     else
                     {
-                        //Print();
                         Map[position.x, position.y] = '.';
                         stepsToMove = int.Parse(steps);
                         steps = "";
-                        position = Move(stepsToMove, position, facing);
+                        position = Move(stepsToMove, position, ref facing);
                         facing = Turn(Instructions[i], facing);
                         Map[position.x, position.y] = 'P';
-                        //Print();
                     }
                 }
                 Map[position.x, position.y] = '.';
                 stepsToMove = int.Parse(steps);
-                position = Move(stepsToMove, position, facing);
+                position = Move(stepsToMove, position, ref facing);
+                Map[position.x, position.y] = 'P';
+                Print();
                 return ((position.x + 1) * 1000) + ((position.y + 1) * 4) + facing;
             }
             public void Print()
@@ -101,12 +101,13 @@
 
                 }
             }
-            public (int x, int y) Move(int steps, (int x, int y) current, int facing)
+            public (int x, int y) Move(int steps, (int x, int y) current, ref int facing)
             {
                 (int x, int y) newPosition = current;
                 for (int i = 0; i < steps; i++)
                 {
                     var previous = newPosition;
+                    int previousfacing = facing;
                     switch (facing)
                     {
                         case 0:
@@ -128,11 +129,13 @@
                     }
                     if (Map[newPosition.x, newPosition.y] == '#')
                     {
+                        facing = previousfacing;
                         return previous;
                     }
                 }
                 return newPosition;
             }
+            
 
             public static (int x, int y) FlatWrap(char[,] map, (int x, int y) newPosition, ref int facing)
             {
@@ -204,7 +207,7 @@
                                 facing = Turn('L', facing);
                                 break;
                             case 2:
-                                newPosition.y = (sectionsize * 3) - (newPosition.y);
+                                newPosition.y = (sectionsize * 3) - (newPosition.y+1);
                                 newPosition.x = (sectionsize * 2)-1;
                                 facing = Turn('R', Turn('R', facing));
                                 break;

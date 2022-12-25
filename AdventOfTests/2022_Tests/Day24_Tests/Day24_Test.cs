@@ -32,7 +32,7 @@ namespace AdventOfTests._2022_Tests
         public void RunPartTwoFull()
         {
             day.RunPart2(ArgumentType.Full);
-            Assert.That(day.result, Is.EqualTo(""));
+            Assert.That(day.result, Is.EqualTo("713"));
         }
     }
 }
