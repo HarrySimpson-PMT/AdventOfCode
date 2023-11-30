@@ -1,11 +1,11 @@
-﻿namespace AdventOfCode.Year2023
+﻿namespace AdventOfCode.Year2022
 {
-    public class DayX : Day
+    public class DayXX : Day
     {
 
-        public DayX(int today) : base(today)
+        public DayXX(int today) : base(today)
         {
-
+            
         }
         public override void RunPart1(ArgumentType argumentType)
         {
