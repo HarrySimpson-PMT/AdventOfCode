@@ -87,7 +87,7 @@
                     Height = data.Length;
                     Width = data[0].Length;
                     Entrance = (x: 0, y: data[0].IndexOf('.'));
-                    Exit = (x: Height-1, y: data[Height - 1].IndexOf('.'));
+                    Exit = (x: Height - 1, y: data[Height - 1].IndexOf('.'));
                     int count = 0;
                     for (int x = 1; x < Height - 1; x++)
                     {
@@ -116,7 +116,7 @@
                                 PlayerPositions.Add(Exit);
                             if (curr == Entrance)
                                 PlayerPositions.Add(Entrance);
-                            if ((curr.x>0&& curr.x<Height-1&& curr.y>0&& curr.y<Width-1) && (!X_Entities.ContainsKey(curr.x) || !X_Entities[curr.x].Exists(point => point.Y == curr.y)))
+                            if ((curr.x > 0 && curr.x < Height - 1 && curr.y > 0 && curr.y < Width - 1) && (!X_Entities.ContainsKey(curr.x) || !X_Entities[curr.x].Exists(point => point.Y == curr.y)))
                                 PlayerPositions.Add(curr);
                         }
                     }

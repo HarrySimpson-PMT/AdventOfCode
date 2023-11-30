@@ -17,7 +17,7 @@
         public int ID { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
-        public abstract char GetIcon();        
+        public abstract char GetIcon();
         public Entity(int x, int y, int id)
         {
             ID = id;

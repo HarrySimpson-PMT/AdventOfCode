@@ -2,7 +2,6 @@
 {
     public class Day22 : Day
     {
-
         public Day22(int today) : base(today)
         {
 
@@ -17,23 +16,33 @@
         public override void RunPart2(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            MonkeyMap MM = new(data, false);
+            MonkeyMap MM = new(data, false, argumentType);
             result = MM.RunDirections().ToString();
             Console.WriteLine(result);
 
         }
+
         public class MonkeyMap
         {
             public char[,] Map { get; set; }
+            public char[,] CorrectedMap { get; set; }
             public string Instructions { get; set; }
             public delegate (int x, int y) WrapAround(char[,] map, (int x, int y) newPosition, ref int facing);
             WrapAround wrapAround = null!;
-            public MonkeyMap(string[] data, bool flatearth = true)
+
+
+            public MonkeyMap(string[] data, bool flatearth = true, ArgumentType argumentType = ArgumentType.Sample)
             {
                 if (flatearth)
                     wrapAround = FlatWrap;
                 else
-                    wrapAround = GlobeWrap;
+                {
+                    if (argumentType == ArgumentType.Sample)
+                        wrapAround = GlobeWrap;
+                    else
+                        wrapAround = GlobeWrapV2;
+                }
+
 
                 int xlen = data.Length - 2;
                 int ylen = 0;
@@ -81,7 +90,7 @@
                 stepsToMove = int.Parse(steps);
                 position = Move(stepsToMove, position, ref facing);
                 Map[position.x, position.y] = 'P';
-                Print();
+                //Print();
                 return ((position.x + 1) * 1000) + ((position.y + 1) * 4) + facing;
             }
             public void Print()
@@ -135,7 +144,7 @@
                 }
                 return newPosition;
             }
-            
+
 
             public static (int x, int y) FlatWrap(char[,] map, (int x, int y) newPosition, ref int facing)
             {
@@ -177,7 +186,7 @@
                         {
                             case 0:
                                 newPosition.y = map.GetLength(1) - 1;
-                                newPosition.x = map.GetLength(0) - (newPosition.x+1);
+                                newPosition.x = map.GetLength(0) - (newPosition.x + 1);
                                 facing = Turn('R', Turn('R', facing));
                                 break;
                             case 1:
@@ -198,17 +207,17 @@
                         {
                             case 0:
                                 newPosition.y = (sectionsize * 3) - (newPosition.y + 1);
-                                newPosition.x = (sectionsize * 3)-1;
+                                newPosition.x = (sectionsize * 3) - 1;
                                 facing = Turn('R', Turn('R', facing));
                                 break;
                             case 1:
-                                newPosition.x = (sectionsize * 2 - (newPosition.y+1) +(sectionsize*2));
+                                newPosition.x = (sectionsize * 2 - (newPosition.y + 1) + (sectionsize * 2));
                                 newPosition.y = (sectionsize * 2);
                                 facing = Turn('L', facing);
                                 break;
                             case 2:
-                                newPosition.y = (sectionsize * 3) - (newPosition.y+1);
-                                newPosition.x = (sectionsize * 2)-1;
+                                newPosition.y = (sectionsize * 3) - (newPosition.y + 1);
+                                newPosition.x = (sectionsize * 2) - 1;
                                 facing = Turn('R', Turn('R', facing));
                                 break;
                             case 3:
@@ -248,7 +257,7 @@
                                 facing = Turn('R', Turn('R', facing));
                                 break;
                             case 1:
-                                newPosition.x = (newPosition.y)-sectionsize;
+                                newPosition.x = (newPosition.y) - sectionsize;
                                 newPosition.y = (sectionsize * 2);
                                 facing = Turn('R', facing);
                                 break;
@@ -268,6 +277,111 @@
                 }
                 return newPosition;
             }
+            public static (int x, int y) GlobeWrapV2(char[,] map, (int x, int y) newPosition, ref int facing)
+            {
+                int sectionsize = map.GetLength(0) / 4;
+                int HeightSection = newPosition.x / sectionsize;
+                int WidthSection = newPosition.y / sectionsize;
+
+                switch (facing)
+                {
+                    case 0: //going EAST 
+                        switch (HeightSection)
+                        {
+                            case 0: //y set by inner section size - sectionsize correction; x => set by inversion of x - sectionsize correction required
+                                newPosition.x = sectionsize * 2 + (sectionsize - 1) - newPosition.x;
+                                newPosition.y = sectionsize * 2 - 1;
+                                facing = Turn('R', Turn('R', facing));
+                                break;
+                            case 1: //y => set by x - no correction required; x => set by inner section size - sectionsize correction required
+                                newPosition.y = sectionsize + newPosition.x;
+                                newPosition.x = sectionsize - 1;
+                                facing = Turn('L', facing);
+                                break;
+                            case 2: //y => set by innser section size - sectionsize correction required; x => set by inversion of x - sectionsize correction required
+                                newPosition.x = (sectionsize * 3 - 1) - newPosition.x;
+                                newPosition.y = sectionsize * 3 - 1;
+                                facing = Turn('R', Turn('R', facing));
+                                break;
+                            case 3: //y => set by x - no correction required; x => set by inner section size - sectionsize correction required
+                                newPosition.y = newPosition.x - (sectionsize * 2);
+                                newPosition.x = sectionsize * 3 - 1;
+                                facing = Turn('L', facing);
+                                break;
+                        }
+                        break;
+                    case 1: //down South
+                        switch (WidthSection)
+                        {
+                            case 0: //y => set by inversion of y - sectionsize correction required; x=> static - no correction required
+                                newPosition.y = (sectionsize *2) + newPosition.y;
+                                newPosition.x = 0;
+                                break;
+                            case 1: // x=> set by y - no correction required; y=> inner sectionsize - sectionsize correction required
+                                newPosition.x = sectionsize * 2 + newPosition.y;
+                                newPosition.y = sectionsize - 1;
+                                facing = Turn('R', facing);
+                                break;
+                            case 2: //x=> set by y - no correction required; y=> static inner - sectionsize correction required
+                                newPosition.x = newPosition.y - sectionsize;
+                                newPosition.y = sectionsize * 2 - 1 ;
+                                facing = Turn('R', facing);
+                                break;
+                        }
+                        break;
+                    case 2: //left WEST
+                        switch (HeightSection)
+                        {
+                            case 0: //y => set to 0 - no correction required; x => set by inversion of x - sectionsize correction required
+                                newPosition.x = (sectionsize * 2) + (sectionsize - 1) - (newPosition.x);
+                                newPosition.y = 0;
+                                facing = Turn('R', Turn('R', facing));
+                                break;
+                            case 1: //y=> set by x - no correction required; x => set by outer section size - no correction required
+                                newPosition.y = newPosition.x - sectionsize;
+                                newPosition.x = sectionsize * 2;
+                                facing = Turn('L', facing);
+                                break;
+                            case 2: //y => set by outer section size - no correction required; x => set by inversion of x - sectionsize correction required
+                                newPosition.x = (sectionsize * 3 - 1) - (newPosition.x);
+                                newPosition.y = sectionsize;
+                                facing = Turn('R', Turn('R', facing));
+
+                                break;
+                            case 3: // y => set by  x - no correction required; x => set to zero - no correction required
+                                newPosition.y = sectionsize +newPosition.x - (sectionsize * 3);
+                                newPosition.x = 0;
+                                facing = Turn('L', facing);
+                                break;
+                        }
+
+                        break;
+                    case 3:
+                        switch (WidthSection)
+                        {
+                            case 0: //y => set to outer sectionsize - no correction required; x=> set by y - no correction required
+                                newPosition.x = newPosition.y + (sectionsize);
+                                newPosition.y = sectionsize;
+                                facing = Turn('R', facing);
+                                break;
+                            case 1://y => set to 0 - no correction required; x=> set by y - no correction required
+                                newPosition.x = (newPosition.y) + (sectionsize * 2);
+                                newPosition.y = 0;
+                                facing = Turn('R', facing);
+                                break;
+                            case 2://y => set by inversion of y - sectionsize correction required; x=> set by inner sectionsize - sectionsize correction required
+                                newPosition.y = newPosition.y - sectionsize*2;
+                                newPosition.x = sectionsize * 4 - 1;
+                                break;
+
+                        }
+
+                        break;
+                }
+                return newPosition;
+            }
+
+
             public static int Turn(char dir, int curr)
             {
                 if (dir == 'L')

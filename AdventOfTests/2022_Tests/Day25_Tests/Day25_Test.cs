@@ -92,7 +92,7 @@ namespace AdventOfTests._2022_Tests
             SnafuValue = "122";
             IntValue = Day25.SNAFU.ConvertFromSnafu(SnafuValue);
             Assert.That(IntValue, Is.EqualTo(37));
-            
+
             SnafuValue = "1121-1110-1=0";
             IntValue = Day25.SNAFU.ConvertFromSnafu(SnafuValue);
             Assert.That(IntValue, Is.EqualTo(314159265));

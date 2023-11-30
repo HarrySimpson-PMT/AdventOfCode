@@ -36,7 +36,7 @@ namespace AdventOfCode.Year2022
 
         record Map(int[,] distances, Valve[] valves);
         record Valve(int id, string name, int flowRate, string[] tunnels);
-        record Player(Valve valve, int distance);
+        record Player(Valve Valve, int Distance);
 
         public Dictionary<string, ControlNode> Nodes { get; set; } = new();
         public SortedSet<string> ValveStateMap { get; set; } = new();
@@ -44,11 +44,11 @@ namespace AdventOfCode.Year2022
 
         public VolcanoPressureControlSystem(string[] data)
         {
-            foreach (var line in data)
+            foreach (string line in data)
             {
                 Nodes.Add(line.Split(" ")[1], new ControlNode(line));
             }
-            foreach (var node in Nodes)
+            foreach (KeyValuePair<string, ControlNode> node in Nodes)
             {
                 if (node.Value.FlowRate > 0)
                     PressuerizedNodes++;
@@ -58,7 +58,7 @@ namespace AdventOfCode.Year2022
         }
         public void CreateValveStateMap()
         {
-            foreach (var node in Nodes)
+            foreach (KeyValuePair<string, ControlNode> node in Nodes)
             {
                 if (node.Value.FlowRate > 0)
                 {
@@ -71,7 +71,7 @@ namespace AdventOfCode.Year2022
             get
             {
                 string state = "";
-                foreach (var node in ValveStateMap)
+                foreach (string node in ValveStateMap)
                     state += Nodes[node].ValveOpen ? "1" : "0";
                 return state;
             }
@@ -121,7 +121,7 @@ namespace AdventOfCode.Year2022
 
             if (PressuerizedNodes != 0)
             {
-                foreach (var connection in Nodes[currentlocation].NodeConnections)
+                foreach (ControlNode connection in Nodes[currentlocation].NodeConnections)
                 {
                     if (connection.Visited < 3)
                     {
@@ -170,7 +170,7 @@ namespace AdventOfCode.Year2022
 
             public void MakeConnections(Dictionary<string, ControlNode> nodes)
             {
-                foreach (var connection in Connections)
+                foreach (string connection in Connections)
                 {
                     NodeConnections.Add(nodes[connection]);
                 }
@@ -196,12 +196,12 @@ namespace AdventOfCode.Year2022
         {
             // initialize and run MaxFlow()
 
-            var map = Parse(input);
+            Map map = Parse(input);
 
-            var start = map.valves.Single(x => x.name == "AA");
+            Valve start = map.valves.Single(x => x.name == "AA");
 
-            var valvesToOpen = new BitArray(map.valves.Length);
-            for (var i = 0; i < map.valves.Length; i++)
+            BitArray valvesToOpen = new(map.valves.Length);
+            for (int i = 0; i < map.valves.Length; i++)
             {
                 if (map.valves[i].flowRate > 0)
                 {
@@ -248,12 +248,12 @@ namespace AdventOfCode.Year2022
             }
 
             // Compute the next states for each player:
-            var nextStatesByPlayer = new Player[2][];
+            Player[][] nextStatesByPlayer = new Player[2][];
 
-            for (var iplayer = 0; iplayer < 2; iplayer++)
+            for (int iplayer = 0; iplayer < 2; iplayer++)
             {
 
-                var player = iplayer == 0 ? player0 : player1;
+                Player player = iplayer == 0 ? player0 : player1;
 
                 if (player.distance > 0)
                 {
@@ -285,14 +285,14 @@ namespace AdventOfCode.Year2022
                     // the valve is already open, let's try each valves that are still closed:
                     // this is where brancing happens
 
-                    var nextStates = new List<Player>();
+                    List<Player> nextStates = new();
 
-                    for (var i = 0; i < valvesToOpen.Length; i++)
+                    for (int i = 0; i < valvesToOpen.Length; i++)
                     {
                         if (valvesToOpen[i])
                         {
-                            var nextValve = map.valves[i];
-                            var distance = map.distances[player.valve.id, nextValve.id];
+                            Valve nextValve = map.valves[i];
+                            int distance = map.distances[player.valve.id, nextValve.id];
                             // the player moves in this time slot towards the valve, so use distance - 1 here
                             nextStates.Add(new Player(nextValve, distance - 1));
                         }
@@ -317,9 +317,9 @@ namespace AdventOfCode.Year2022
             }
 
             // all is left is going over every possible step combinations for each players:
-            for (var i0 = 0; i0 < nextStatesByPlayer[0].Length; i0++)
+            for (int i0 = 0; i0 < nextStatesByPlayer[0].Length; i0++)
             {
-                for (var i1 = 0; i1 < nextStatesByPlayer[1].Length; i1++)
+                for (int i1 = 0; i1 < nextStatesByPlayer[1].Length; i1++)
                 {
 
                     player0 = nextStatesByPlayer[0][i0];
@@ -334,7 +334,7 @@ namespace AdventOfCode.Year2022
 
                     // this is an other optimization, if both players are walking
                     // we can advance time until one of them reaches target:
-                    var advance = 0;
+                    int advance = 0;
                     if (player0.distance > 0 && player1.distance > 0)
                     {
                         advance = Math.Min(player0.distance, player1.distance);
@@ -370,8 +370,8 @@ namespace AdventOfCode.Year2022
             // just one step away. Open these as well. Continue until we run 
             // out of time.
 
-            var flow = 0;
-            for (var i = 0; i < valvesToOpen.Length; i++)
+            int flow = 0;
+            for (int i = 0; i < valvesToOpen.Length; i++)
             {
                 if (valvesToOpen[i])
                 {
@@ -395,15 +395,15 @@ namespace AdventOfCode.Year2022
         {
             // Valve BB has flow rate=0; tunnels lead to valve CC
             // Valve CC has flow rate=10; tunnels lead to valves DD, EE
-            var valveList = new List<Valve>();
-            foreach (var line in input.Split("\n"))
+            List<Valve> valveList = new();
+            foreach (string line in input.Split("\n"))
             {
-                var name = Regex.Match(line, "Valve (.*) has").Groups[1].Value;
-                var flow = int.Parse(Regex.Match(line, @"\d+").Groups[0].Value);
-                var tunnels = Regex.Match(line, "to valves? (.*)").Groups[1].Value.Split(", ").ToArray();
+                string name = Regex.Match(line, "Valve (.*) has").Groups[1].Value;
+                int flow = int.Parse(Regex.Match(line, @"\d+").Groups[0].Value);
+                string[] tunnels = Regex.Match(line, "to valves? (.*)").Groups[1].Value.Split(", ").ToArray();
                 valveList.Add(new Valve(0, name, flow, tunnels));
             }
-            var valves = valveList
+            Valve[] valves = valveList
                 .OrderByDescending(valve => valve.flowRate)
                 .Select((v, i) => v with { id = i })
                 .ToArray();
@@ -414,42 +414,42 @@ namespace AdventOfCode.Year2022
         int[,] ComputeDistances(Valve[] valves)
         {
             // Bellman-Ford style distance calculation for every pair of valves
-            var distances = new int[valves.Length, valves.Length];
-            for (var i = 0; i < valves.Length; i++)
+            int[,] distances = new int[valves.Length, valves.Length];
+            for (int i = 0; i < valves.Length; i++)
             {
-                for (var j = 0; j < valves.Length; j++)
+                for (int j = 0; j < valves.Length; j++)
                 {
                     distances[i, j] = int.MaxValue;
                 }
             }
-            foreach (var valve in valves)
+            foreach (Valve valve in valves)
             {
-                foreach (var target in valve.tunnels)
+                foreach (string target in valve.tunnels)
                 {
-                    var targetNode = valves.Single(x => x.name == target);
+                    Valve targetNode = valves.Single(x => x.name == target);
                     distances[valve.id, targetNode.id] = 1;
                     distances[targetNode.id, valve.id] = 1;
                 }
             }
 
-            var n = distances.GetLength(0);
-            var done = false;
+            int n = distances.GetLength(0);
+            bool done = false;
             while (!done)
             {
                 done = true;
-                for (var source = 0; source < n; source++)
+                for (int source = 0; source < n; source++)
                 {
-                    for (var target = 0; target < n; target++)
+                    for (int target = 0; target < n; target++)
                     {
                         if (source != target)
                         {
-                            for (var through = 0; through < n; through++)
+                            for (int through = 0; through < n; through++)
                             {
                                 if (distances[source, through] == int.MaxValue || distances[through, target] == int.MaxValue)
                                 {
                                     continue;
                                 }
-                                var cost = distances[source, through] + distances[through, target];
+                                int cost = distances[source, through] + distances[through, target];
                                 if (cost < distances[source, target])
                                 {
                                     done = false;

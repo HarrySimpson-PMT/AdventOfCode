@@ -2,37 +2,38 @@
 
 namespace AdventOfTests._2022_Tests
 {
-    public class Day24_Test
+    public class Day1_Test
     {
         Day day;
         [SetUp]
         public void Setup()
         {
-            day = new Day24(24);
+            day = new Day1(1);
         }
         [Test]
         public void RunPartOneSample()
         {
             day.RunPart1(ArgumentType.Sample);
-            Assert.That(day.result, Is.EqualTo("18"));
+            Assert.That(day.result, Is.EqualTo("24000"));
         }
         [Test]
         public void RunPartOneFull()
         {
             day.RunPart1(ArgumentType.Full);
-            Assert.That(day.result, Is.EqualTo("230"));
+            Assert.That(day.result, Is.EqualTo("67450"));
         }
         [Test]
         public void RunPartTwoSample()
         {
             day.RunPart2(ArgumentType.Sample);
-            Assert.That(day.result, Is.EqualTo("54"));
+            Assert.That(day.result, Is.EqualTo("45000"));
         }
         [Test]
         public void RunPartTwoFull()
         {
             day.RunPart2(ArgumentType.Full);
-            Assert.That(day.result, Is.EqualTo("713"));
+            Assert.That(day.result, Is.EqualTo("199357"));
         }
+
     }
 }

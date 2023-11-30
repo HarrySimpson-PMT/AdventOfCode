@@ -6,6 +6,8 @@ namespace AdventOfTests._2022_Tests
     {
         Day day;
         Day22.MonkeyMap monkeyMap;
+        Day22.MonkeyMap monkeyMapV2;
+        
         int face;
         (int x, int y) Coords;
         [SetUp]
@@ -13,7 +15,9 @@ namespace AdventOfTests._2022_Tests
         {
             day = new Day22(22);
             monkeyMap = new(day.Sample, true);
+            monkeyMapV2 = new(day.Full, true);
         }
+        #region Standard Tests
         [Test]
         public void RunPartOneSample()
         {
@@ -38,11 +42,13 @@ namespace AdventOfTests._2022_Tests
             day.RunPart2(ArgumentType.Full);
             Assert.That(day.result, Is.EqualTo("144012"));
         }
+        #endregion
+        #region sampel section tests
         [Test]
         public void Face_0_Section0()
         {
             face = 0;
-            Coords = Day22.MonkeyMap.GlobeWrap(monkeyMap.Map, (1,11), ref face);
+            Coords = Day22.MonkeyMap.GlobeWrap(monkeyMap.Map, (1, 11), ref face);
             Assert.That(Coords, Is.EqualTo((10, 15)));
             Assert.That(face, Is.EqualTo(2));
         }
@@ -264,5 +270,128 @@ namespace AdventOfTests._2022_Tests
             Assert.That(Coords, Is.EqualTo((4, 11)));
             Assert.That(face, Is.EqualTo(2));
         }
+        #endregion
+        #region sampel section tests
+        [Test]
+        public void V2Face_0_Section0()
+        {
+            face = 0;
+            Coords = Day22.MonkeyMap.GlobeWrapV2(monkeyMapV2.Map, (0, 149), ref face);
+            Assert.That(Coords, Is.EqualTo((149, 99)));
+            Assert.That(face, Is.EqualTo(2));
+        }
+        [Test]
+        public void V2Face_0_Section1()
+        {
+            face = 0;
+            Coords = Day22.MonkeyMap.GlobeWrapV2(monkeyMapV2.Map, (50, 99), ref face);
+            Assert.That(Coords, Is.EqualTo((49, 100)));
+            Assert.That(face, Is.EqualTo(3));
+        }
+        [Test]
+        public void V2Face_0_Section2()
+        {
+            face = 0;
+            Coords = Day22.MonkeyMap.GlobeWrapV2(monkeyMapV2.Map, (101, 99), ref face);
+            Assert.That(Coords, Is.EqualTo((48, 149)));
+            Assert.That(face, Is.EqualTo(2));
+        }
+        [Test]
+        public void V2Face_0_Section3()
+        {
+            face = 0;
+            Coords = Day22.MonkeyMap.GlobeWrapV2(monkeyMapV2.Map, (150, 49), ref face);
+            Assert.That(Coords, Is.EqualTo((149, 50)));
+            Assert.That(face, Is.EqualTo(3));
+        }
+        [Test]
+        public void V2Face_1_Section0()
+        {
+            face = 1;
+            Coords = Day22.MonkeyMap.GlobeWrapV2(monkeyMapV2.Map, (199, 49), ref face);
+            Assert.That(Coords, Is.EqualTo((0, 149)));
+            Assert.That(face, Is.EqualTo(1));
+        }
+        [Test]
+        public void V2Face_1_Section0_2()
+        {
+            face = 1;
+            Coords = Day22.MonkeyMap.GlobeWrapV2(monkeyMapV2.Map, (199, 0), ref face);
+            Assert.That(Coords, Is.EqualTo((0, 149)));
+            Assert.That(face, Is.EqualTo(1));
+        }
+        [Test]
+        public void V2Face_1_Section1()
+        {
+            face = 1;
+            Coords = Day22.MonkeyMap.GlobeWrapV2(monkeyMapV2.Map, (149, 50), ref face);
+            Assert.That(Coords, Is.EqualTo((150, 49)));
+            Assert.That(face, Is.EqualTo(2));
+        }
+        [Test]
+        public void V2Face_1_Section2()
+        {
+            face = 1;
+            Coords = Day22.MonkeyMap.GlobeWrapV2(monkeyMapV2.Map, (49, 100), ref face);
+            Assert.That(Coords, Is.EqualTo((50, 99)));
+            Assert.That(face, Is.EqualTo(2));
+        }
+        [Test]
+        public void V2Face_2_Section0()
+        {
+            face = 2;
+            Coords = Day22.MonkeyMap.GlobeWrapV2(monkeyMapV2.Map, (0, 50), ref face);
+            Assert.That(Coords, Is.EqualTo((149, 0)));
+            Assert.That(face, Is.EqualTo(0));
+        }
+        [Test]
+        public void V2Face_2_Section1()
+        {
+            face = 2;
+            Coords = Day22.MonkeyMap.GlobeWrapV2(monkeyMapV2.Map, (50, 50), ref face);
+            Assert.That(Coords, Is.EqualTo((100, 0)));
+            Assert.That(face, Is.EqualTo(1));
+        }
+        [Test]
+        public void V2Face_2_Section2()
+        {
+            face = 2;
+            Coords = Day22.MonkeyMap.GlobeWrapV2(monkeyMapV2.Map, (100, 0), ref face);
+            Assert.That(Coords, Is.EqualTo((49, 50)));
+            Assert.That(face, Is.EqualTo(0));
+        }
+        [Test]
+        public void V2Face_2_Section3()
+        {
+            face = 2;
+            Coords = Day22.MonkeyMap.GlobeWrapV2(monkeyMapV2.Map, (199, 0), ref face);
+            Assert.That(Coords, Is.EqualTo((0, 99)));
+            Assert.That(face, Is.EqualTo(1));
+        }
+        [Test]
+        public void V2Face_3_Section0()
+        {
+            face = 3;
+            Coords = Day22.MonkeyMap.GlobeWrapV2(monkeyMapV2.Map, (100, 0), ref face);
+            Assert.That(Coords, Is.EqualTo((50, 50)));
+            Assert.That(face, Is.EqualTo(0));
+        }
+        [Test]
+        public void V2Face_3_Section1()
+        {
+            face = 3;
+            Coords = Day22.MonkeyMap.GlobeWrapV2(monkeyMapV2.Map, (0, 99), ref face);
+            Assert.That(Coords, Is.EqualTo((199, 0)));
+            Assert.That(face, Is.EqualTo(0));
+        }
+        [Test]
+        public void V2Face_3_Section2()
+        {
+            face = 3;
+            Coords = Day22.MonkeyMap.GlobeWrapV2(monkeyMapV2.Map, (0, 100), ref face);
+            Assert.That(Coords, Is.EqualTo((199, 0)));
+            Assert.That(face, Is.EqualTo(3));
+        }
+        #endregion
     }
 }

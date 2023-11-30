@@ -42,7 +42,7 @@
                 long result = 0;
                 for (int i = 0; i < value.Length; i++)
                 {
-                    result += ConvertToBase5(ConvertFromSymbol(value[i]), value.Length-i);
+                    result += ConvertToBase5(ConvertFromSymbol(value[i]), value.Length - i);
                 }
                 return result;
             }
@@ -66,26 +66,26 @@
             }
             public static long ConvertToBase5(int value, int place)
             {
-                long factor = (long)Math.Pow(5, place-1);
+                long factor = (long)Math.Pow(5, place - 1);
                 return value * factor;
             }
             public static string ConvertFromInt(long value)
             {
-                List<char> arr = new List<char>();
+                List<char> arr = new();
                 while (value > 0)
                 {
                     switch (value % 5)
                     {
-                        case 3: 
-                            arr.Add('='); 
-                            value += 5; 
+                        case 3:
+                            arr.Add('=');
+                            value += 5;
                             break;
-                        case 4: 
-                            arr.Add('-'); 
-                            value += 5; 
+                        case 4:
+                            arr.Add('-');
+                            value += 5;
                             break;
-                        default: 
-                            arr.Add((char)((value % 5) + '0')); 
+                        default:
+                            arr.Add((char)((value % 5) + '0'));
                             break;
                     }
                     value /= 5;
