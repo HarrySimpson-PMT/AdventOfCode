@@ -1,9 +1,9 @@
 ﻿namespace AdventOfCode.Year2022
 {
-    public class Day1 : Day
+    public class Day01 : Day
     {
 
-        public Day1(int today) : base(today)
+        public Day01(int today) : base(today)
         {
 
         }
