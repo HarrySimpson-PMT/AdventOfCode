@@ -1,8 +1,8 @@
-﻿namespace AdventOfCode.Year2023
+﻿
+namespace AdventOfCode.Year2023
 {
     public class DayXX : Day
     {
-
         public DayXX(int today) : base(today)
         {
             
@@ -10,7 +10,7 @@
         public override void RunPart1(ArgumentType argumentType)
         {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
-            result = "";
+            result = "d";
             Console.WriteLine(result);
         }
         public override void RunPart2(ArgumentType argumentType)

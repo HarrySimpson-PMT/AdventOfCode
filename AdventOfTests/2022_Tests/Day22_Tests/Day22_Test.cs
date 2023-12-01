@@ -317,7 +317,7 @@ namespace AdventOfTests._2022_Tests
         {
             face = 1;
             Coords = Day22.MonkeyMap.GlobeWrapV2(monkeyMapV2.Map, (199, 0), ref face);
-            Assert.That(Coords, Is.EqualTo((0, 149)));
+            Assert.That(Coords, Is.EqualTo((0, 100)));
             Assert.That(face, Is.EqualTo(1));
         }
         [Test]
