@@ -164,6 +164,12 @@
     <None Update="2023\Day02\Sample.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="2023\Day03\Full.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="2023\Day03\Sample.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="2023\DayXX\Full.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
