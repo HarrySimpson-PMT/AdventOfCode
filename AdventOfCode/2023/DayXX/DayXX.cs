@@ -3,7 +3,7 @@ namespace AdventOfCode.Year2023
 {
     public class DayXX : Day
     {
-        public DayXX(int today) : base(today)
+        public DayXX(int today, int year) : base(today, year)
         {
             
         }
