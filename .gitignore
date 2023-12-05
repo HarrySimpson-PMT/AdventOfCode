@@ -11,8 +11,9 @@ Sample.txt
 *.userosscache
 *.sln.docstates
 
-Sample.txt
-Full.txt
+
+*/Full.txt
+*/Sample.txt
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
