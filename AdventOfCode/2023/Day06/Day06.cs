@@ -23,6 +23,7 @@ namespace AdventOfCode.Year2023
         }
         public class RaceCalculator
         {
+            //This could be optimized by using binary serach to find the inclusion edges, reducing it from n to logn
             public long WaysToWin(string[] data, bool correction = false)
             {
                 List<long> Times = data[0].Split(":")[1].Trim().Split(" ").Where(x=>x!="").Select(x => long.Parse(x)).ToList();
