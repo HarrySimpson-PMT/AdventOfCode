@@ -1,6 +1,7 @@
 ﻿
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace AdventOfCode.Year2023
 {
@@ -25,6 +26,7 @@ namespace AdventOfCode.Year2023
             result = magmaMadness.CalculatePath2().ToString();
             Console.WriteLine(result);
         }
+        //Could optimize with priority queue and setting cap on heat after the first time the end is reached.
         public class MagmaMadness
         {
             CityBlock[,] cityBlocks;
@@ -45,26 +47,28 @@ namespace AdventOfCode.Year2023
             }
             public int CalculatePath2()
             {
-                Queue<((int x, int y) position, (int x, int y) Direction, int heat)> queue = new Queue<((int x, int y) position, (int x, int y) Direction, int heat)>();
+                PriorityQueue<((int x, int y) position, (int x, int y) Direction, int heat), int> queue = new PriorityQueue<((int x, int y) position, (int x, int y) Direction, int heat), int>();
                 int cumulatedHeat = 0;
                 for (int i = 1; i < 11; i++)
                 {
                     cumulatedHeat += cityBlocks[0, i].heatLoss;
                     if(i>4)
-                        queue.Enqueue(((0, i), Directions.East, cumulatedHeat));
+                        queue.Enqueue(((0, i), Directions.East, cumulatedHeat), cumulatedHeat);
                 }
                 cumulatedHeat = 0;
                 for (int i = 1; i < 11; i++)
                 {
                     cumulatedHeat += cityBlocks[i, 0].heatLoss;
                     if(i > 4)
-                        queue.Enqueue(((i, 0), Directions.South, cumulatedHeat));
+                        queue.Enqueue(((i, 0), Directions.South, cumulatedHeat), cumulatedHeat);
                 }
                 while (queue.Count > 0)
                 {
                     ((int x, int y) position, (int x, int y) Direction, int heat) = queue.Dequeue();
-                    if (position.x == 0 && position.y == 8 && heat == 21)
-                        Debugger.Break();
+                    if(position.x == xlen - 1 && position.y == ylen - 1)
+                    {
+                        return heat;
+                    }
                     if (position.x < 0 || position.x >= xlen || position.y < 0 || position.y >= ylen)
                         continue;
                     List<((int x, int y) direction, int heat)> outs = cityBlocks[position.x, position.y].CalculateOut(Direction, heat);
@@ -77,7 +81,7 @@ namespace AdventOfCode.Year2023
                             {
                                 cumulatedHeat += cityBlocks[i, position.y].heatLoss;
                                 if(position.x - i >= 4)
-                                    queue.Enqueue(((i, position.y), Directions.North, cumulatedHeat));
+                                    queue.Enqueue(((i, position.y), Directions.North, cumulatedHeat), cumulatedHeat);
                             }
                         }
                         if (gout.direction == Directions.South)
@@ -87,7 +91,7 @@ namespace AdventOfCode.Year2023
                             {
                                 cumulatedHeat += cityBlocks[i, position.y].heatLoss;
                                 if (i - position.x >= 4)
-                                    queue.Enqueue(((i, position.y), Directions.South, cumulatedHeat));
+                                    queue.Enqueue(((i, position.y), Directions.South, cumulatedHeat), cumulatedHeat);
                             }
                         }
                         if (gout.direction == Directions.East)
@@ -97,7 +101,7 @@ namespace AdventOfCode.Year2023
                             {
                                 cumulatedHeat += cityBlocks[position.x, i].heatLoss;
                                 if (i - position.y >= 4)
-                                    queue.Enqueue(((position.x, i), Directions.East, cumulatedHeat));
+                                    queue.Enqueue(((position.x, i), Directions.East, cumulatedHeat), cumulatedHeat);
                             }
                         }
                         if (gout.direction == Directions.West)
@@ -107,7 +111,7 @@ namespace AdventOfCode.Year2023
                             {
                                 cumulatedHeat += cityBlocks[position.x, i].heatLoss;
                                 if (position.y - i >= 4)
-                                    queue.Enqueue(((position.x, i), Directions.West, cumulatedHeat));
+                                    queue.Enqueue(((position.x, i), Directions.West, cumulatedHeat), cumulatedHeat);
                             }
                         }
                     }
@@ -117,24 +121,26 @@ namespace AdventOfCode.Year2023
             }
             public int CalculatePath()
             {
-                Queue<((int x, int y) position, (int x, int y) Direction, int heat)> queue = new Queue<((int x, int y) position, (int x, int y) Direction, int heat)>();
+                PriorityQueue<((int x, int y) position, (int x, int y) Direction, int heat), int> queue = new PriorityQueue<((int x, int y) position, (int x, int y) Direction, int heat), int>();
                 int cumulatedHeat = 0;
                 for (int i = 1; i < 4; i++)
                 {
                     cumulatedHeat += cityBlocks[0, i].heatLoss;
-                    queue.Enqueue(((0, i), Directions.East, cumulatedHeat));
+                    queue.Enqueue(((0, i), Directions.East, cumulatedHeat), cumulatedHeat);
                 }
                 cumulatedHeat = 0;
                 for (int i = 1; i < 4; i++)
                 {
                     cumulatedHeat += cityBlocks[i, 0].heatLoss;
-                    queue.Enqueue(((i, 0), Directions.South, cumulatedHeat));
+                    queue.Enqueue(((i, 0), Directions.South, cumulatedHeat), cumulatedHeat);
                 }
                 while (queue.Count > 0)
                 {
                     ((int x, int y) position, (int x, int y) Direction, int heat) = queue.Dequeue();
-                    if(position.x == 2 && position.y == 8)
-                        Debugger.Break();
+                    if (position.x == xlen - 1 && position.y == ylen - 1)
+                    {
+                        return heat;
+                    }
                     if (position.x < 0 || position.x >= xlen || position.y < 0 || position.y >= ylen)
                         continue;
                     List<((int x, int y) direction, int heat)> outs = cityBlocks[position.x, position.y].CalculateOut(Direction, heat);
@@ -147,7 +153,7 @@ namespace AdventOfCode.Year2023
                             for (int i = position.x - 1; i >= 0 && position.x - 1 - i < 3; i--)
                             {
                                 cumulatedHeat += cityBlocks[i, position.y].heatLoss;
-                                queue.Enqueue(((i, position.y), Directions.North, cumulatedHeat));
+                                queue.Enqueue(((i, position.y), Directions.North, cumulatedHeat), cumulatedHeat);
                             }
                         }
                         if (gout.direction == Directions.South)
@@ -157,7 +163,7 @@ namespace AdventOfCode.Year2023
                             for (int i = position.x + 1; i < xlen && i - position.x - 1 < 3; i++)
                             {
                                 cumulatedHeat += cityBlocks[i, position.y].heatLoss;
-                                queue.Enqueue(((i, position.y), Directions.South, cumulatedHeat));
+                                queue.Enqueue(((i, position.y), Directions.South, cumulatedHeat), cumulatedHeat);
                             }
                         }
                         if (gout.direction == Directions.East)
@@ -167,7 +173,7 @@ namespace AdventOfCode.Year2023
                             for (int i = position.y + 1; i < ylen && i - position.y - 1 < 3; i++)
                             {
                                 cumulatedHeat += cityBlocks[position.x, i].heatLoss;
-                                queue.Enqueue(((position.x, i), Directions.East, cumulatedHeat));
+                                queue.Enqueue(((position.x, i), Directions.East, cumulatedHeat), cumulatedHeat);
                             }
                         }
                         if (gout.direction == Directions.West)
@@ -177,7 +183,7 @@ namespace AdventOfCode.Year2023
                             for (int i = position.y - 1; i >= 0 && position.y - 1 - i < 3; i--)
                             {
                                 cumulatedHeat += cityBlocks[position.x, i].heatLoss;
-                                queue.Enqueue(((position.x, i), Directions.West, cumulatedHeat));
+                                queue.Enqueue(((position.x, i), Directions.West, cumulatedHeat), cumulatedHeat);
                             }
                         }
                     }
