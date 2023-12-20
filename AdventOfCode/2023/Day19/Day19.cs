@@ -49,7 +49,7 @@ namespace AdventOfCode.Year2023 {
                 while (ToProcess.Count > 0) {
                     current = ToProcess.Dequeue();
                     List<TheoreticalXmasJunk>? newJunk = rules[current.NextRule].CalculateNewJunk(current);
-                    if(newJunk == null) { Debugger.Break(); }
+                    if (newJunk == null) { Debugger.Break(); }
                     if (newJunk != null) {
                         foreach (TheoreticalXmasJunk t in newJunk) {
                             if (t.NextRule == "A") {
@@ -180,13 +180,13 @@ namespace AdventOfCode.Year2023 {
                     switch (checkType) {
                         case type.x:
                             if (greaterThan) {
-                                result[0].xmin = value+1; //matches
+                                result[0].xmin = value + 1; //matches
                                 result[0].NextRule = destination;
                                 result[1].xmax = value; //fails
                                 result[1].NextRule = "";
                             }
                             else {
-                                result[0].xmax = value-1;
+                                result[0].xmax = value - 1;
                                 result[0].NextRule = destination;
                                 result[1].xmin = value;
                                 result[1].NextRule = "";
@@ -194,13 +194,13 @@ namespace AdventOfCode.Year2023 {
                             break;
                         case type.m:
                             if (greaterThan) {
-                                result[0].mmin = value+1;
+                                result[0].mmin = value + 1;
                                 result[0].NextRule = destination;
                                 result[1].mmax = value;
                                 result[1].NextRule = "";
                             }
                             else {
-                                result[0].mmax = value-1;
+                                result[0].mmax = value - 1;
                                 result[0].NextRule = destination;
                                 result[1].mmin = value;
                                 result[1].NextRule = "";
@@ -208,13 +208,13 @@ namespace AdventOfCode.Year2023 {
                             break;
                         case type.a:
                             if (greaterThan) {
-                                result[0].amin = value+1;
+                                result[0].amin = value + 1;
                                 result[0].NextRule = destination;
                                 result[1].amax = value;
                                 result[1].NextRule = "";
                             }
                             else {
-                                result[0].amax = value-1;
+                                result[0].amax = value - 1;
                                 result[0].NextRule = destination;
                                 result[1].amin = value;
                                 result[1].NextRule = "";
@@ -222,13 +222,13 @@ namespace AdventOfCode.Year2023 {
                             break;
                         case type.s:
                             if (greaterThan) {
-                                result[0].smin = value+1;
+                                result[0].smin = value + 1;
                                 result[0].NextRule = destination;
                                 result[1].smax = value;
                                 result[1].NextRule = "";
                             }
                             else {
-                                result[0].smax = value-1;
+                                result[0].smax = value - 1;
                                 result[0].NextRule = destination;
                                 result[1].smin = value;
                                 result[1].NextRule = "";
@@ -302,10 +302,10 @@ namespace AdventOfCode.Year2023 {
                 public HashSet<string> visited = new HashSet<string>();
                 public long PossibleJunk() {
                     //check for invalid ranges
-                    if (xmin > xmax || mmin > mmax || amin > amax || smin > smax) { 
+                    if (xmin > xmax || mmin > mmax || amin > amax || smin > smax) {
                         Debugger.Break();
                     }
-                    long result = (long)(xmax - xmin+1) * (long)(mmax - mmin+1) * (long)(amax - amin + 1) * (long)(smax - smin + 1);
+                    long result = (long)(xmax - xmin + 1) * (long)(mmax - mmin + 1) * (long)(amax - amin + 1) * (long)(smax - smin + 1);
                     return result;
                 }
                 public override string ToString() {

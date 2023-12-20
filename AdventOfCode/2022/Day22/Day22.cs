@@ -1,20 +1,15 @@
-﻿namespace AdventOfCode.Year2022
-{
-    public class Day22 : Day
-    {
-        public Day22(int today) : base(today)
-        {
+﻿namespace AdventOfCode.Year2022 {
+    public class Day22 : Day {
+        public Day22(int today) : base(today) {
 
         }
-        public override void RunPart1(ArgumentType argumentType)
-        {
+        public override void RunPart1(ArgumentType argumentType) {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
             MonkeyMap MM = new(data);
             result = MM.RunDirections().ToString();
             Console.WriteLine(result);
         }
-        public override void RunPart2(ArgumentType argumentType)
-        {
+        public override void RunPart2(ArgumentType argumentType) {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
             MonkeyMap MM = new(data, false, argumentType);
             result = MM.RunDirections().ToString();
@@ -22,8 +17,7 @@
 
         }
 
-        public class MonkeyMap
-        {
+        public class MonkeyMap {
             public char[,] Map { get; set; }
             public char[,] CorrectedMap { get; set; }
             public string Instructions { get; set; }
@@ -31,12 +25,10 @@
             WrapAround wrapAround = null!;
 
 
-            public MonkeyMap(string[] data, bool flatearth = true, ArgumentType argumentType = ArgumentType.Sample)
-            {
+            public MonkeyMap(string[] data, bool flatearth = true, ArgumentType argumentType = ArgumentType.Sample) {
                 if (flatearth)
                     wrapAround = FlatWrap;
-                else
-                {
+                else {
                     if (argumentType == ArgumentType.Sample)
                         wrapAround = GlobeWrap;
                     else
@@ -46,16 +38,13 @@
 
                 int xlen = data.Length - 2;
                 int ylen = 0;
-                for (int i = 0; i < xlen; i++)
-                {
+                for (int i = 0; i < xlen; i++) {
                     if (data[i].Length > ylen)
                         ylen = data[i].Length;
                 }
                 Map = new char[xlen, ylen];
-                for (int x = 0; x < xlen; x++)
-                {
-                    for (int y = 0; y < ylen; y++)
-                    {
+                for (int x = 0; x < xlen; x++) {
+                    for (int y = 0; y < ylen; y++) {
                         Map[x, y] = ' ';
                         if (y < data[x].Length)
                             Map[x, y] = data[x][y];
@@ -63,8 +52,7 @@
                 }
                 Instructions = data[data.Length - 1];
             }
-            public int RunDirections(bool FlatEarth = true)
-            {
+            public int RunDirections(bool FlatEarth = true) {
                 int facing = 0;
                 (int x, int y) position = (0, 0);
                 while (Map[position.x, position.y] != '.')
@@ -72,12 +60,10 @@
                 Map[position.x, position.y] = 'P';
                 string steps = "";
                 int stepsToMove;
-                for (int i = 0; i < Instructions.Length; i++)
-                {
+                for (int i = 0; i < Instructions.Length; i++) {
                     if (Instructions[i] != 'R' && Instructions[i] != 'L')
                         steps = steps + Instructions[i];
-                    else
-                    {
+                    else {
                         Map[position.x, position.y] = '.';
                         stepsToMove = int.Parse(steps);
                         steps = "";
@@ -93,16 +79,13 @@
                 //Print();
                 return ((position.x + 1) * 1000) + ((position.y + 1) * 4) + facing;
             }
-            public void Print()
-            {
+            public void Print() {
                 Console.Clear();
                 Console.Clear();
                 Console.Clear();
 
-                for (int x = 0; x < Map.GetLength(0); x++)
-                {
-                    for (int y = 0; y < Map.GetLength(1); y++)
-                    {
+                for (int x = 0; x < Map.GetLength(0); x++) {
+                    for (int y = 0; y < Map.GetLength(1); y++) {
                         Console.Write(Map[x, y]);
                     }
                     Console.WriteLine();
@@ -110,15 +93,12 @@
 
                 }
             }
-            public (int x, int y) Move(int steps, (int x, int y) current, ref int facing)
-            {
+            public (int x, int y) Move(int steps, (int x, int y) current, ref int facing) {
                 (int x, int y) newPosition = current;
-                for (int i = 0; i < steps; i++)
-                {
+                for (int i = 0; i < steps; i++) {
                     var previous = newPosition;
                     int previousfacing = facing;
-                    switch (facing)
-                    {
+                    switch (facing) {
                         case 0:
                             newPosition.y++;
                             break;
@@ -132,12 +112,10 @@
                             newPosition.x--;
                             break;
                     }
-                    if (newPosition.x < 0 || newPosition.x >= Map.GetLength(0) || newPosition.y < 0 || newPosition.y >= Map.GetLength(1) || Map[newPosition.x, newPosition.y] == ' ')
-                    {
+                    if (newPosition.x < 0 || newPosition.x >= Map.GetLength(0) || newPosition.y < 0 || newPosition.y >= Map.GetLength(1) || Map[newPosition.x, newPosition.y] == ' ') {
                         newPosition = wrapAround(Map, newPosition, ref facing);
                     }
-                    if (Map[newPosition.x, newPosition.y] == '#')
-                    {
+                    if (Map[newPosition.x, newPosition.y] == '#') {
                         facing = previousfacing;
                         return previous;
                     }
@@ -146,10 +124,8 @@
             }
 
 
-            public static (int x, int y) FlatWrap(char[,] map, (int x, int y) newPosition, ref int facing)
-            {
-                switch (facing)
-                {
+            public static (int x, int y) FlatWrap(char[,] map, (int x, int y) newPosition, ref int facing) {
+                switch (facing) {
                     case 0:
                         newPosition.y = 0;
                         while (map[newPosition.x, newPosition.y] == ' ')
@@ -173,17 +149,14 @@
                 }
                 return newPosition;
             }
-            public static (int x, int y) GlobeWrap(char[,] map, (int x, int y) newPosition, ref int facing)
-            {
+            public static (int x, int y) GlobeWrap(char[,] map, (int x, int y) newPosition, ref int facing) {
                 int sectionsize = map.GetLength(0) / 3;
                 int HeightSection = newPosition.x / sectionsize;
                 int WidthSection = newPosition.y / sectionsize;
 
-                switch (facing)
-                {
+                switch (facing) {
                     case 0:
-                        switch (HeightSection)
-                        {
+                        switch (HeightSection) {
                             case 0:
                                 newPosition.y = map.GetLength(1) - 1;
                                 newPosition.x = map.GetLength(0) - (newPosition.x + 1);
@@ -203,8 +176,7 @@
 
                         break;
                     case 1:
-                        switch (WidthSection)
-                        {
+                        switch (WidthSection) {
                             case 0:
                                 newPosition.y = (sectionsize * 3) - (newPosition.y + 1);
                                 newPosition.x = (sectionsize * 3) - 1;
@@ -228,8 +200,7 @@
                         }
                         break;
                     case 2:
-                        switch (HeightSection)
-                        {
+                        switch (HeightSection) {
                             case 0:
                                 newPosition.y = (sectionsize + newPosition.x);
                                 newPosition.x = (sectionsize);
@@ -249,8 +220,7 @@
 
                         break;
                     case 3:
-                        switch (WidthSection)
-                        {
+                        switch (WidthSection) {
                             case 0:
                                 newPosition.y = (sectionsize * 3 - (newPosition.y + 1));
                                 newPosition.x = 0;
@@ -277,17 +247,14 @@
                 }
                 return newPosition;
             }
-            public static (int x, int y) GlobeWrapV2(char[,] map, (int x, int y) newPosition, ref int facing)
-            {
+            public static (int x, int y) GlobeWrapV2(char[,] map, (int x, int y) newPosition, ref int facing) {
                 int sectionsize = map.GetLength(0) / 4;
                 int HeightSection = newPosition.x / sectionsize;
                 int WidthSection = newPosition.y / sectionsize;
 
-                switch (facing)
-                {
+                switch (facing) {
                     case 0: //going EAST 
-                        switch (HeightSection)
-                        {
+                        switch (HeightSection) {
                             case 0: //y set by inner section size - sectionsize correction; x => set by inversion of x - sectionsize correction required
                                 newPosition.x = sectionsize * 2 + (sectionsize - 1) - newPosition.x;
                                 newPosition.y = sectionsize * 2 - 1;
@@ -311,10 +278,9 @@
                         }
                         break;
                     case 1: //down South
-                        switch (WidthSection)
-                        {
+                        switch (WidthSection) {
                             case 0: //y => set by inversion of y - sectionsize correction required; x=> static - no correction required
-                                newPosition.y = (sectionsize *2) + newPosition.y;
+                                newPosition.y = (sectionsize * 2) + newPosition.y;
                                 newPosition.x = 0;
                                 break;
                             case 1: // x=> set by y - no correction required; y=> inner sectionsize - sectionsize correction required
@@ -324,14 +290,13 @@
                                 break;
                             case 2: //x=> set by y - no correction required; y=> static inner - sectionsize correction required
                                 newPosition.x = newPosition.y - sectionsize;
-                                newPosition.y = sectionsize * 2 - 1 ;
+                                newPosition.y = sectionsize * 2 - 1;
                                 facing = Turn('R', facing);
                                 break;
                         }
                         break;
                     case 2: //left WEST
-                        switch (HeightSection)
-                        {
+                        switch (HeightSection) {
                             case 0: //y => set to 0 - no correction required; x => set by inversion of x - sectionsize correction required
                                 newPosition.x = (sectionsize * 2) + (sectionsize - 1) - (newPosition.x);
                                 newPosition.y = 0;
@@ -349,7 +314,7 @@
 
                                 break;
                             case 3: // y => set by  x - no correction required; x => set to zero - no correction required
-                                newPosition.y = sectionsize +newPosition.x - (sectionsize * 3);
+                                newPosition.y = sectionsize + newPosition.x - (sectionsize * 3);
                                 newPosition.x = 0;
                                 facing = Turn('L', facing);
                                 break;
@@ -357,8 +322,7 @@
 
                         break;
                     case 3:
-                        switch (WidthSection)
-                        {
+                        switch (WidthSection) {
                             case 0: //y => set to outer sectionsize - no correction required; x=> set by y - no correction required
                                 newPosition.x = newPosition.y + (sectionsize);
                                 newPosition.y = sectionsize;
@@ -370,7 +334,7 @@
                                 facing = Turn('R', facing);
                                 break;
                             case 2://y => set by inversion of y - sectionsize correction required; x=> set by inner sectionsize - sectionsize correction required
-                                newPosition.y = newPosition.y - sectionsize*2;
+                                newPosition.y = newPosition.y - sectionsize * 2;
                                 newPosition.x = sectionsize * 4 - 1;
                                 break;
 
@@ -382,8 +346,7 @@
             }
 
 
-            public static int Turn(char dir, int curr)
-            {
+            public static int Turn(char dir, int curr) {
                 if (dir == 'L')
                     curr = (curr + 3) % 4;
                 else

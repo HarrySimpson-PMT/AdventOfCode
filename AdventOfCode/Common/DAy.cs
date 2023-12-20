@@ -1,17 +1,13 @@
-﻿namespace AdventOfCode.Common
-{
-    public abstract class Day
-    {
+﻿namespace AdventOfCode.Common {
+    public abstract class Day {
         public string[] Sample;
         public string[] Full;
         public string result = "";
         public string day = "";
 
-        public Day(int today, int year = 2022)
-        {
+        public Day(int today, int year = 2022) {
             day = today.ToString();
-            if (day.Length == 1)
-            {
+            if (day.Length == 1) {
                 day = "0" + day;
             }
             Sample = System.IO.File.ReadAllLines($@"{year}/Day{day}/Sample.txt");

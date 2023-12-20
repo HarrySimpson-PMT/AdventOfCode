@@ -1,27 +1,21 @@
-﻿namespace AdventOfCode.Year2022
-{
-    public class Day19 : Day
-    {
+﻿namespace AdventOfCode.Year2022 {
+    public class Day19 : Day {
 
-        public Day19(int today) : base(today)
-        {
+        public Day19(int today) : base(today) {
 
         }
-        public override void RunPart1(ArgumentType argumentType)
-        {
+        public override void RunPart1(ArgumentType argumentType) {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
             ProductionSimulator PS = new(data);
             List<int> res = PS.FindBestBlueprint(24);
             int sum = 0;
-            for (int i = 0; i < res.Count(); i++)
-            {
+            for (int i = 0; i < res.Count(); i++) {
                 sum += (res[i] * (i + 1));
             }
             result = sum.ToString();
             Console.WriteLine(result);
         }
-        public override void RunPart2(ArgumentType argumentType)
-        {
+        public override void RunPart2(ArgumentType argumentType) {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
             string[] FristThree = new string[3];
             FristThree[0] = data[0];
@@ -30,31 +24,25 @@
             ProductionSimulator PS = new(FristThree);
             List<int> res = PS.FindBestBlueprint(32);
             int sum = 1;
-            for (int i = 0; i < res.Count(); i++)
-            {
+            for (int i = 0; i < res.Count(); i++) {
                 sum *= res[i];
             }
             result = sum.ToString();
             Console.WriteLine(result);
         }
     }
-    public class ProductionSimulator
-    {
+    public class ProductionSimulator {
         public int CurrentBlueprint { get; set; }
         public List<Blueprint> Blueprints { get; set; } = new List<Blueprint>();
-        public ProductionSimulator(string[] data)
-        {
-            foreach (string line in data)
-            {
+        public ProductionSimulator(string[] data) {
+            foreach (string line in data) {
                 if (line != "")
                     Blueprints.Add(new Blueprint(line));
             }
         }
-        public List<int> FindBestBlueprint(int time)
-        {
+        public List<int> FindBestBlueprint(int time) {
             List<int> result = new();
-            foreach (Blueprint bp in Blueprints)
-            {
+            foreach (Blueprint bp in Blueprints) {
                 Reset();
                 MaximumPotential(bp, time, null);
                 result.Add(CurrentMax);
@@ -62,16 +50,13 @@
             }
             return result;
         }
-        public void MaximumPotential(Blueprint bp, int MaxTime, NextRobot? nextRobot)
-        {
-            if (MaxTime > 1 && Cheat(bp, MaxTime))
-            {
+        public void MaximumPotential(Blueprint bp, int MaxTime, NextRobot? nextRobot) {
+            if (MaxTime > 1 && Cheat(bp, MaxTime)) {
                 int ore = 0;
                 int clay = 0;
                 int obsidian = 0;
                 int TimeToBuild = 0;
-                switch (nextRobot)
-                {
+                switch (nextRobot) {
                     case NextRobot.Ore:
                         ore = bp.OreRobotCost.ore;
                         break;
@@ -91,44 +76,37 @@
                 }
 
                 //Determine time required to aquire materials needed to build the robit.
-                if (ore > 0 && CurrentOre < ore)
-                {
+                if (ore > 0 && CurrentOre < ore) {
                     int ProductionTime = (ore - CurrentOre) / CurrentOreProduction;
                     int reamain = (ore - CurrentOre) % CurrentOreProduction == 0 ? 0 : 1;
                     TimeToBuild = Math.Max(TimeToBuild, ProductionTime + reamain + 1);
                 }
-                else
-                {
+                else {
                     TimeToBuild = Math.Max(TimeToBuild, 1);
                 }
 
-                if (clay > 0 && CurrentClayProduction > 0 && CurrentClay < clay)
-                {
+                if (clay > 0 && CurrentClayProduction > 0 && CurrentClay < clay) {
                     int ProductionTime = (clay - CurrentClay) / CurrentClayProduction;
                     int reamain = (clay - CurrentClay) % CurrentClayProduction == 0 ? 0 : 1;
                     TimeToBuild = Math.Max(TimeToBuild, ProductionTime + reamain + 1);
                 }
-                else
-                {
+                else {
                     TimeToBuild = Math.Max(TimeToBuild, 1);
                 }
 
-                if (obsidian > 0 && CurrentObsidianProduction > 0 && CurrentObsidian < obsidian)
-                {
+                if (obsidian > 0 && CurrentObsidianProduction > 0 && CurrentObsidian < obsidian) {
                     int ProductionTime = (obsidian - CurrentObsidian) / CurrentObsidianProduction;
                     int reamain = (obsidian - CurrentObsidian) % CurrentObsidianProduction == 0 ? 0 : 1;
                     TimeToBuild = Math.Max(TimeToBuild, ProductionTime + reamain + 1);
                 }
-                else
-                {
+                else {
                     TimeToBuild = Math.Max(TimeToBuild, 1);
                 }
 
                 if (TimeToBuild < 1)
                     throw new Exception("Time to rebuild");
 
-                if (MaxTime - TimeToBuild >= 0)
-                {
+                if (MaxTime - TimeToBuild >= 0) {
                     int prevore = CurrentOre;
                     int prevclay = CurrentClay;
                     int prevobsidian = CurrentObsidian;
@@ -139,13 +117,11 @@
                     CurrentGeodes = CurrentGeodes + (CurrentGeodesProduction * TimeToBuild);
 
                     //if any currents go negative throw error
-                    if (CurrentOre < 0 || CurrentClay < 0 || CurrentObsidian < 0 || CurrentGeodes < 0)
-                    {
+                    if (CurrentOre < 0 || CurrentClay < 0 || CurrentObsidian < 0 || CurrentGeodes < 0) {
                         throw new Exception("Currents went negative");
                     }
 
-                    switch (nextRobot)
-                    {
+                    switch (nextRobot) {
                         case NextRobot.Ore:
                             CurrentOreProduction += 1;
                             break;
@@ -164,10 +140,8 @@
 
                     int Max = CurrentGeodes + CurrentGeodesProduction * (MaxTime - TimeToBuild);
 
-                    foreach (NextRobot nr in Enum.GetValues(typeof(NextRobot)))
-                    {
-                        switch (nr)
-                        {
+                    foreach (NextRobot nr in Enum.GetValues(typeof(NextRobot))) {
+                        switch (nr) {
                             case NextRobot.Ore:
                                 if (CurrentOreProduction < bp.Maximums.ore)
                                     MaximumPotential(bp, MaxTime - TimeToBuild, nr);
@@ -192,8 +166,7 @@
                     CurrentClay = prevclay;
                     CurrentObsidian = prevobsidian;
                     CurrentGeodes = preGeodes;
-                    switch (nextRobot)
-                    {
+                    switch (nextRobot) {
                         case NextRobot.Ore:
                             CurrentOreProduction -= 1;
                             break;
@@ -211,26 +184,22 @@
             }
             CurrentMax = Math.Max(CurrentMax, CurrentGeodes + CurrentGeodesProduction * (MaxTime));
         }
-        public bool Cheat(Blueprint bp, int MaxTime)
-        {
+        public bool Cheat(Blueprint bp, int MaxTime) {
             int currentGeodes = CurrentGeodes;
             int currentGeodesProduction = CurrentGeodesProduction;
             int currentObsidian = CurrentObsidian;
             int currentObsidianProduction = CurrentObsidianProduction;
             int currentClay = CurrentClay;
             int currentClayProduction = CurrentClayProduction;
-            for (int i = 0; i < MaxTime; i++)
-            {
+            for (int i = 0; i < MaxTime; i++) {
                 currentGeodes += currentGeodesProduction;
                 currentObsidian += currentObsidianProduction;
                 currentClay += currentClayProduction;
-                if (currentObsidian >= bp.GeodeRobotCost.obsidian)
-                {
+                if (currentObsidian >= bp.GeodeRobotCost.obsidian) {
                     currentGeodesProduction += 1;
                     currentObsidian -= bp.GeodeRobotCost.obsidian;
                 }
-                if (currentClay >= bp.ObsidianRobotCost.clay)
-                {
+                if (currentClay >= bp.ObsidianRobotCost.clay) {
                     currentObsidianProduction += 1;
                     currentClay -= bp.ObsidianRobotCost.clay;
                 }
@@ -240,8 +209,7 @@
                 return true;
             return false;
         }
-        public void Reset()
-        {
+        public void Reset() {
             CurrentTime = 0;
             CurrentOre = 0;
             CurrentOreProduction = 1;
@@ -264,16 +232,14 @@
         public int CurrentGeodesProduction { get; set; } = 0;
         public enum NextRobot { Ore, Clay, Obsidian, Geode }
     }
-    public class Blueprint
-    {
+    public class Blueprint {
         public int ID { get; set; }
         public (int ore, int clay, int obsidian) Maximums { get; set; }
         public (int ore, int clay, int obsidian) OreRobotCost { get; set; }
         public (int ore, int clay, int obsidian) ClayRobotCost { get; set; }
         public (int ore, int clay, int obsidian) ObsidianRobotCost { get; set; }
         public (int ore, int clay, int obsidian) GeodeRobotCost { get; set; }
-        public Blueprint(string data)
-        {
+        public Blueprint(string data) {
             string pattern = @"Blueprint (\d+): Each ore robot costs (\d+) ore. Each clay robot costs (\d+) ore. Each obsidian robot costs (\d+) ore and (\d+) clay. Each geode robot costs (\d+) ore and (\d+) obsidian.";
             Regex regex = new(pattern);
 

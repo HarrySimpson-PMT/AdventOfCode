@@ -1,35 +1,27 @@
 ﻿
-namespace AdventOfCode.Year2023
-{
-    public class Day06 : Day
-    {
-        public Day06(int today, int year) : base(today, year)
-        {
-            
+namespace AdventOfCode.Year2023 {
+    public class Day06 : Day {
+        public Day06(int today, int year) : base(today, year) {
+
         }
-        public override void RunPart1(ArgumentType argumentType)
-        {
+        public override void RunPart1(ArgumentType argumentType) {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
             RaceCalculator raceCalculator = new RaceCalculator();
             result = raceCalculator.WaysToWin(data).ToString();
             Console.WriteLine(result);
         }
-        public override void RunPart2(ArgumentType argumentType)
-        {
+        public override void RunPart2(ArgumentType argumentType) {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
             RaceCalculator raceCalculator = new RaceCalculator();
             result = raceCalculator.WaysToWin(data, true).ToString();
             Console.WriteLine(result);
         }
-        public class RaceCalculator
-        {
+        public class RaceCalculator {
             //This could be optimized by using binary serach to find the inclusion edges, reducing it from n to logn
-            public long WaysToWin(string[] data, bool correction = false)
-            {
-                List<long> Times = data[0].Split(":")[1].Trim().Split(" ").Where(x=>x!="").Select(x => long.Parse(x)).ToList();
+            public long WaysToWin(string[] data, bool correction = false) {
+                List<long> Times = data[0].Split(":")[1].Trim().Split(" ").Where(x => x != "").Select(x => long.Parse(x)).ToList();
                 List<long> Distances = data[1].Split(":")[1].Trim().Split(" ").Where(x => x != "").Select(x => long.Parse(x)).ToList();
-                if(correction)
-                {
+                if (correction) {
                     Times = new();
                     Times.Add(long.Parse(data[0].Split(":")[1].Trim().Replace(" ", "")));
                     Distances = new();
@@ -38,19 +30,15 @@ namespace AdventOfCode.Year2023
                 long n = Times.Count;
                 long result = 1;
                 long ways = 0;
-                for (int i = 0; i < n; i++)
-                {
+                for (int i = 0; i < n; i++) {
                     bool win = false;
-                    for (long speed = Times[i]; speed >=  0; speed--)
-                    {
+                    for (long speed = Times[i]; speed >= 0; speed--) {
                         long distance = speed * (Times[i] - speed);
-                        if (distance > Distances[i])
-                        {
+                        if (distance > Distances[i]) {
                             win = true;
                             ways++;
                         }
-                        else if (win)
-                        {
+                        else if (win) {
                             break;
                         }
                     }
