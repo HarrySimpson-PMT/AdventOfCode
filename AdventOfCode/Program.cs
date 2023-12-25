@@ -6,8 +6,7 @@ var day = new Day22(22);
 
 int x = 3;
 
-switch (x)
-{
+switch (x) {
     case 0:
         day.RunPart1(ArgumentType.Sample);
         break;

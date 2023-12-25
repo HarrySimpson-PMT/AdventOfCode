@@ -1,10 +1,7 @@
-﻿namespace AdventOfCode.Year2022
-{
-    public class Day13 : Day
-    {
+﻿namespace AdventOfCode.Year2022 {
+    public class Day13 : Day {
         public Day13(int today) : base(today) { }
-        public override void RunPart1(ArgumentType argumentType)
-        {
+        public override void RunPart1(ArgumentType argumentType) {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
             data = data.Where(x => !string.IsNullOrEmpty(x)).ToArray();
 
@@ -13,11 +10,9 @@
             int set = 1;
 
             bool reset = false;
-            for (int i = 0; i < data.Length; i++)
-            {
+            for (int i = 0; i < data.Length; i++) {
                 packets.Add(new ListPacket(data[i]));
-                if (reset)
-                {
+                if (reset) {
                     sum += packets[i - 1].CompareTo(packets[i]) < 0 ? set : 0;
                     set++;
                 }
@@ -27,14 +22,12 @@
             Console.WriteLine(result);
 
         }
-        public override void RunPart2(ArgumentType argumentType)
-        {
+        public override void RunPart2(ArgumentType argumentType) {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
             int sum = 1;
             List<Packet> packets = new();
             data = data.Where(x => !string.IsNullOrEmpty(x)).ToArray();
-            for (int i = 0; i < data.Length; i++)
-            {
+            for (int i = 0; i < data.Length; i++) {
                 packets.Add(new ListPacket(data[i]));
             }
             Packet A = new ListPacket("[[2]]");
@@ -54,20 +47,15 @@
 
         }
     }
-    public abstract class Packet : IComparable<Packet>
-    {
-        public override string ToString()
-        {
+    public abstract class Packet : IComparable<Packet> {
+        public override string ToString() {
             return base.ToString() ?? throw new NotImplementedException();
         }
-        public int CompareTo(Packet? other)
-        {
-            if (this is ItemPacket && other is ItemPacket)
-            {
+        public int CompareTo(Packet? other) {
+            if (this is ItemPacket && other is ItemPacket) {
                 return ((ItemPacket)this).CompareTo((ItemPacket)other);
             }
-            else if (this is ListPacket && other is ListPacket)
-            {
+            else if (this is ListPacket && other is ListPacket) {
                 return ((ListPacket)this).CompareTo((ListPacket)other);
             }
 
@@ -89,41 +77,32 @@
             return A.CompareTo(B);
         }
     }
-    public class ItemPacket : Packet
-    {
+    public class ItemPacket : Packet {
         public int? Value { get; set; }
-        public ItemPacket(int? value)
-        {
+        public ItemPacket(int? value) {
             Value = value;
         }
         public override string ToString() => Value.ToString() ?? "NULL";
-        public int CompareTo(ItemPacket? other)
-        {
+        public int CompareTo(ItemPacket? other) {
             if (Value == null && other!.Value == null) return 0;
             if (Value != null && other!.Value != null) return ((int)Value).CompareTo((int)other.Value);
             if (other!.Value != null) return -1;
             return 1;
         }
     }
-    public class ListPacket : Packet
-    {
+    public class ListPacket : Packet {
         public List<Packet> Packets { get; set; }
-        public ListPacket(string value)
-        {
+        public ListPacket(string value) {
             Packets = new List<Packet>();
-            if (value == "")
-            {
+            if (value == "") {
                 Packets.Add(new ItemPacket(null));
             }
-            for (int i = 1; i < value.Length - 1; i++)
-            {
-                if (value[i] == '[')
-                {
+            for (int i = 1; i < value.Length - 1; i++) {
+                if (value[i] == '[') {
                     //find closing bracket
                     int j = i;
                     int count = 1;
-                    while (count > 0)
-                    {
+                    while (count > 0) {
                         j++;
                         if (value[j] == '[') count++;
                         if (value[j] == ']') count--;
@@ -134,11 +113,9 @@
 
                 }
                 //if value is number get all numbers and parse into int
-                else if (char.IsDigit(value[i]))
-                {
+                else if (char.IsDigit(value[i])) {
                     int j = i;
-                    while (char.IsDigit(value[j]))
-                    {
+                    while (char.IsDigit(value[j])) {
                         j++;
                     }
                     Packets.Add(new ItemPacket(int.Parse(value.Substring(i, j - i))));
@@ -146,14 +123,11 @@
                 }
             }
         }
-        public int CompareTo(ListPacket? other)
-        {
+        public int CompareTo(ListPacket? other) {
             if (Packets.Count == 0 && other!.Packets.Count == 0) return 0;
-            if (Packets.Count != 0 && other!.Packets.Count != 0)
-            {
+            if (Packets.Count != 0 && other!.Packets.Count != 0) {
                 int i = 0;
-                while (i < Packets.Count && i < other.Packets.Count)
-                {
+                while (i < Packets.Count && i < other.Packets.Count) {
                     int result = Packets[i].CompareTo(other.Packets[i]);
                     if (result != 0) return result;
                     i++;
@@ -165,18 +139,15 @@
             if (Packets.Count == 0) return -1;
             return 1;
         }
-        public override string ToString()
-        {
+        public override string ToString() {
             StringBuilder sb = new();
             sb.Append("[");
-            foreach (Packet packet in Packets)
-            {
+            foreach (Packet packet in Packets) {
                 sb.Append(packet.ToString());
                 sb.Append(",");
             }
             //check if last char is comma
-            if (sb[sb.Length - 1] == ',')
-            {
+            if (sb[sb.Length - 1] == ',') {
                 sb.Remove(sb.Length - 1, 1);
             }
             sb.Append("]");

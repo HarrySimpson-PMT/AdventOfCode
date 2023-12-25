@@ -1,13 +1,9 @@
-﻿namespace AdventOfCode.Year2022
-{
-    public class Day17 : Day
-    {
-        public Day17(int today) : base(today)
-        {
+﻿namespace AdventOfCode.Year2022 {
+    public class Day17 : Day {
+        public Day17(int today) : base(today) {
 
         }
-        public override void RunPart1(ArgumentType argumentType)
-        {
+        public override void RunPart1(ArgumentType argumentType) {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
 
             int currentshape = 0;
@@ -15,8 +11,7 @@
             FallingRockSimulator.Shape shape = new(currentshape, 2);
             long ShapeLevel = 3;
             int moveselctor = 0;
-            while (currentshape < 2023)
-            {
+            while (currentshape < 2023) {
                 //print FallingRockSimulator Tube
                 //FRS.Print();
 
@@ -25,12 +20,10 @@
 
                 FRS.NextMove(data[0][moveselctor++], ref shape, ShapeLevel);
 
-                if (!FRS.NextMove('D', ref shape, ShapeLevel))
-                {
+                if (!FRS.NextMove('D', ref shape, ShapeLevel)) {
                     FRS.WriteShapeToTube(shape, ShapeLevel);
                     currentshape++;
-                    if (currentshape == 2022)
-                    {
+                    if (currentshape == 2022) {
                         result = FRS.currentHeight.ToString();
                         break;
                     }
@@ -39,15 +32,13 @@
                     //print shape
                     //shape.Print();
                 }
-                else
-                {
+                else {
                     ShapeLevel--;
                 }
             }
             Console.WriteLine(result);
         }
-        public override void RunPart2(ArgumentType argumentType)
-        {
+        public override void RunPart2(ArgumentType argumentType) {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
             long MaxRocks = 1000000000000;
             FallingRockSimulator FRS = new();
@@ -56,15 +47,13 @@
             int moveselctor = 0;
             int shapeid = 1;
             var seen = new Dictionary<string, (long rocks, long height)>();
-            while (MaxRocks > 0)
-            {
+            while (MaxRocks > 0) {
                 //print FallingRockSimulator Tube
                 //FRS.Print();
 
                 var lines = FRS.Tube.Take(100).Select(x => new string(string.Join(",", x))).ToArray();
                 var hash = FRS.Tube.Count() > 0 ? FRS.TubeHash() : "";
-                if (seen.TryGetValue(hash, out var cache))
-                {
+                if (seen.TryGetValue(hash, out var cache)) {
                     var heightOfPeriod = FRS.currentHeight - cache.height;
                     var periodLength = cache.rocks - MaxRocks;
 
@@ -75,8 +64,7 @@
                     break;
 
                 }
-                else
-                {
+                else {
 
                     //print FallingRockSimulator Tube
                     //FRS.Print();
@@ -86,8 +74,7 @@
 
                     FRS.NextMove(data[0][moveselctor++], ref shape, ShapeLevel);
 
-                    if (!FRS.NextMove('D', ref shape, ShapeLevel))
-                    {
+                    if (!FRS.NextMove('D', ref shape, ShapeLevel)) {
                         if (FRS.currentHeight > 1)
                             seen.Add(hash, (MaxRocks, FRS.currentHeight));
                         FRS.WriteShapeToTube(shape, ShapeLevel);
@@ -97,22 +84,19 @@
                         ShapeLevel = FRS.currentHeight + 3;
                         shape = new FallingRockSimulator.Shape((shapeid++ % 5), 2);
                     }
-                    else
-                    {
+                    else {
                         ShapeLevel--;
                     }
                 }
 
             }
-            while (MaxRocks > 0)
-            {
+            while (MaxRocks > 0) {
                 if (moveselctor >= data[0].Length)
                     moveselctor = 0;
 
                 FRS.NextMove(data[0][moveselctor++], ref shape, ShapeLevel);
 
-                if (!FRS.NextMove('D', ref shape, ShapeLevel))
-                {
+                if (!FRS.NextMove('D', ref shape, ShapeLevel)) {
                     FRS.WriteShapeToTube(shape, ShapeLevel);
                     MaxRocks--;
                     if (MaxRocks == 0)
@@ -120,8 +104,7 @@
                     ShapeLevel = FRS.currentHeight + 3;
                     shape = new FallingRockSimulator.Shape((shapeid++ % 5), 2);
                 }
-                else
-                {
+                else {
                     ShapeLevel--;
                 }
             }
@@ -131,21 +114,17 @@
             Console.WriteLine(result);
         }
     }
-    public class FallingRockSimulator
-    {
+    public class FallingRockSimulator {
         public long currentHeight { get; set; } = 0;
         public int workingtube { get; set; } = 100;
         public int width { get; set; } = 7;
         public List<bool[]> Tube { get; set; } = new List<bool[]>();
         //aggregate all bool[] in tube into string seperated with newlines
         //public string TubeHash => Tube.Aggregate((x, next) => x.Concat(next).ToArray()).Aggregate("", (x, next) => x + (next ? "#" : "."));
-        public string TubeHash()
-        {
+        public string TubeHash() {
             var sb = new StringBuilder();
-            foreach (var line in Tube)
-            {
-                foreach (var c in line)
-                {
+            foreach (var line in Tube) {
+                foreach (var c in line) {
                     sb.Append(c ? "#" : ".");
                 }
                 sb.AppendLine();
@@ -154,48 +133,38 @@
         }
         public Shape CurrentShape { get; set; }
 
-        public void Print()
-        {
+        public void Print() {
             Console.Clear();
-            for (int i = Tube.Count - 1; i >= 0; i--)
-            {
-                for (int j = 0; j < Tube[i].Length; j++)
-                {
+            for (int i = Tube.Count - 1; i >= 0; i--) {
+                for (int j = 0; j < Tube[i].Length; j++) {
                     Console.Write(Tube[i][j] ? "#" : ".");
                 }
                 Console.WriteLine();
             }
             System.Threading.Thread.Sleep(100);
         }
-        public void WriteShapeToTube(Shape shape, long ShapeLevel)
-        {
+        public void WriteShapeToTube(Shape shape, long ShapeLevel) {
             int Overlap = (int)(currentHeight - ShapeLevel);
-            for (int level = 0; level < Overlap; level++)
-            {
+            for (int level = 0; level < Overlap; level++) {
                 List<Coord> onlevel = shape.ShapePoints.Where(x => x.y == level).ToList();
-                foreach (Coord item in onlevel)
-                {
+                foreach (Coord item in onlevel) {
                     Tube[Tube.Count() - Overlap + level][item.x] = true;
                 }
             }
-            for (int level = Overlap; level <= shape.height; level++)
-            {
+            for (int level = Overlap; level <= shape.height; level++) {
                 if (Tube.Count() > 100)
                     Tube.RemoveAt(0);
                 Tube.Add(new bool[width]);
                 currentHeight++;
                 List<Coord> onlevel = shape.ShapePoints.Where(x => x.y == level).ToList();
-                foreach (Coord item in onlevel)
-                {
+                foreach (Coord item in onlevel) {
                     Tube[Tube.Count - 1][item.x] = true;
                 }
             }
         }
-        public bool NextMove(char direction, ref Shape current, long ShapeLevel)
-        {
+        public bool NextMove(char direction, ref Shape current, long ShapeLevel) {
             Shape nextshape;
-            switch (direction)
-            {
+            switch (direction) {
                 case '<':
                     if (current.left == 0)
                         return false;
@@ -224,35 +193,29 @@
                     throw new Exception("Invalid direction");
             }
         }
-        public bool IsBlocked(Shape shape, long currentlevel)
-        {
+        public bool IsBlocked(Shape shape, long currentlevel) {
             if (currentlevel == -1)
                 return true;
             int overlap = (int)(currentHeight - currentlevel);
-            for (int level = 0; level < overlap; level++)
-            {
+            for (int level = 0; level < overlap; level++) {
                 List<Coord> onlevel = shape.ShapePoints.Where(x => x.y == level).ToList();
-                foreach (Coord item in onlevel)
-                {
+                foreach (Coord item in onlevel) {
                     if (Tube[Tube.Count() - overlap + level][item.x])
                         return true;
                 }
             }
             return false;
         }
-        public class Shape
-        {
+        public class Shape {
             public List<Coord> ShapePoints { get; set; } = new List<Coord>();
             public int ShapeTypeID { get; private set; }
             public int height { get; set; }
             public int left { get; set; }
             public int right { get; set; }
-            public Shape(int type, int Left)
-            {
+            public Shape(int type, int Left) {
                 left = Left;
                 ShapeTypeID = type;
-                switch (type)
-                {
+                switch (type) {
                     //5 types of shapes
                     //first shape is a flat rock 4 wide and two from the left
                     case 0:
@@ -305,12 +268,9 @@
                         throw new Exception("Invalid shape type");
                 }
             }
-            public void Print()
-            {
-                for (int i = height; i >= 0; i--)
-                {
-                    for (int j = left; j <= right; j++)
-                    {
+            public void Print() {
+                for (int i = height; i >= 0; i--) {
+                    for (int j = left; j <= right; j++) {
                         Console.Write(ShapePoints.Any(x => x.x == j && x.y == i) ? "#" : ".");
                     }
                     Console.WriteLine();

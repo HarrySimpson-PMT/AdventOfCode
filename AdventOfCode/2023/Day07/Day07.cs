@@ -1,69 +1,54 @@
 ﻿
-namespace AdventOfCode.Year2023
-{
-    public class Day07 : Day
-    {
-        public Day07(int today, int year) : base(today, year)
-        {
+namespace AdventOfCode.Year2023 {
+    public class Day07 : Day {
+        public Day07(int today, int year) : base(today, year) {
 
         }
-        public override void RunPart1(ArgumentType argumentType)
-        {
+        public override void RunPart1(ArgumentType argumentType) {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
             ElfPoker elfPoker = new ElfPoker();
             result = elfPoker.PlayNormal(data).ToString();
             Console.WriteLine(result);
         }
-        public override void RunPart2(ArgumentType argumentType)
-        {
+        public override void RunPart2(ArgumentType argumentType) {
             string[] data = argumentType == ArgumentType.Sample ? Sample : Full;
             ElfPoker elfPoker = new ElfPoker();
             result = elfPoker.PlayWildCards(data).ToString();
             Console.WriteLine(result);
         }
-        public class ElfPoker
-        {
+        public class ElfPoker {
             public List<Hand> hands = new List<Hand>();
-            public int PlayWildCards(string[] data)
-            {
-                foreach (string s in data)
-                {
+            public int PlayWildCards(string[] data) {
+                foreach (string s in data) {
                     string hand = s.Split(' ')[0];
                     int bet = int.Parse(s.Split(" ")[1]);
                     hands.Add(new Hand(hand, bet, true));
                 }
                 int result = 0;
                 hands.Sort(new UpdatedHandComparer());
-                for (int i = 0; i < hands.Count; i++)
-                {
+                for (int i = 0; i < hands.Count; i++) {
                     result += (i + 1) * hands[i].bet;
                 }
                 return result;
             }
-            public int PlayNormal(string[] data)
-            {
-                foreach (string s in data)
-                {
+            public int PlayNormal(string[] data) {
+                foreach (string s in data) {
                     string hand = s.Split(' ')[0];
                     int bet = int.Parse(s.Split(" ")[1]);
                     hands.Add(new Hand(hand, bet));
                 }
                 int result = 0;
                 hands.Sort(new HandComparer());
-                for (int i = 0; i < hands.Count; i++)
-                {
+                for (int i = 0; i < hands.Count; i++) {
                     result += (i + 1) * hands[i].bet;
                 }
                 return result;
             }
-            public class UpdatedHandComparer : IComparer<Hand>
-            {
-                public int Compare(Hand x, Hand y)
-                {
+            public class UpdatedHandComparer : IComparer<Hand> {
+                public int Compare(Hand x, Hand y) {
                     // First compare by Strength
                     int strengthComparison = x.Strength.CompareTo(y.Strength);
-                    if (strengthComparison != 0)
-                    {
+                    if (strengthComparison != 0) {
                         return strengthComparison;
                     }
 
@@ -81,8 +66,7 @@ namespace AdventOfCode.Year2023
     };
 
                     // Compare each character in the cards
-                    for (int i = 0; i < Math.Min(xCards.Length, yCards.Length); i++)
-                    {
+                    for (int i = 0; i < Math.Min(xCards.Length, yCards.Length); i++) {
                         char xCard = xCards[i];
                         char yCard = yCards[i];
 
@@ -90,8 +74,7 @@ namespace AdventOfCode.Year2023
                         int yValue = cardValues.ContainsKey(yCard) ? cardValues[yCard] : 0;
 
                         int cardComparison = xValue.CompareTo(yValue);
-                        if (cardComparison != 0)
-                        {
+                        if (cardComparison != 0) {
                             return cardComparison;
                         }
                     }
@@ -100,14 +83,11 @@ namespace AdventOfCode.Year2023
                     return xCards.Length.CompareTo(yCards.Length);
                 }
             }
-            public class HandComparer : IComparer<Hand>
-            {
-                public int Compare(Hand x, Hand y)
-                {
+            public class HandComparer : IComparer<Hand> {
+                public int Compare(Hand x, Hand y) {
                     // First compare by Strength
                     int strengthComparison = x.Strength.CompareTo(y.Strength);
-                    if (strengthComparison != 0)
-                    {
+                    if (strengthComparison != 0) {
                         return strengthComparison;
                     }
 
@@ -125,8 +105,7 @@ namespace AdventOfCode.Year2023
     };
 
                     // Compare each character in the cards
-                    for (int i = 0; i < Math.Min(xCards.Length, yCards.Length); i++)
-                    {
+                    for (int i = 0; i < Math.Min(xCards.Length, yCards.Length); i++) {
                         char xCard = xCards[i];
                         char yCard = yCards[i];
 
@@ -134,8 +113,7 @@ namespace AdventOfCode.Year2023
                         int yValue = cardValues.ContainsKey(yCard) ? cardValues[yCard] : 0;
 
                         int cardComparison = xValue.CompareTo(yValue);
-                        if (cardComparison != 0)
-                        {
+                        if (cardComparison != 0) {
                             return cardComparison;
                         }
                     }
@@ -144,27 +122,22 @@ namespace AdventOfCode.Year2023
                     return xCards.Length.CompareTo(yCards.Length);
                 }
             }
-            public class Hand
-            {
+            public class Hand {
                 public int bet { get; set; }
                 public int Strength { get; set; } = 0;
                 public string Cards { get; set; }
                 int a = 0;
                 int b = 0;
-                public override string ToString()
-                {
+                public override string ToString() {
                     return $"Hand: {Cards}; Strength {Strength}; Bet {bet};";
                 }
-                public Hand(string hand, int bet, bool wildcards = false)
-                {
+                public Hand(string hand, int bet, bool wildcards = false) {
                     Cards = hand;
                     this.bet = bet;
                     int[] cards = new int[13];
                     int WildCardCount = 0;
-                    foreach (char c in hand)
-                    {
-                        switch (c)
-                        {
+                    foreach (char c in hand) {
+                        switch (c) {
                             case '2':
                                 cards[0]++;
                                 break;
@@ -185,12 +158,10 @@ namespace AdventOfCode.Year2023
                             case 'T':
                                 cards[8]++; break;
                             case 'J':
-                                if (wildcards)
-                                {
+                                if (wildcards) {
                                     WildCardCount++;
                                 }
-                                else
-                                {
+                                else {
                                     cards[9]++;
                                 }
                                 break;
@@ -202,15 +173,12 @@ namespace AdventOfCode.Year2023
                                 cards[12]++; break;
                         }
                     }
-                    foreach (int scoringset in cards)
-                    {
-                        if (scoringset > a)
-                        {
+                    foreach (int scoringset in cards) {
+                        if (scoringset > a) {
                             b = a;
                             a = scoringset;
                         }
-                        else if (scoringset > b)
-                        {
+                        else if (scoringset > b) {
                             b = scoringset;
                         }
                     }
